@@ -1,0 +1,59 @@
+/* Ship's-wheel section navigator (home page). Half the wheel peeks in from the left edge
+   and turns as you scroll; hovering opens it, and the handles on the visible half are labelled with sections. */
+@property --s { syntax: '<length>'; inherits: true; initial-value: 132px; }
+@property --rot { syntax: '<angle>'; inherits: true; initial-value: 0deg; }
+
+/* the centre sits on the left edge, so half the wheel (and half the hub) peeks in */
+.helm { --s: 132px; --rot: 0deg; position: fixed; left: 0; top: 54%; z-index: 30; width: var(--s); height: var(--s); transform: translate(-50%, -50%);
+  transition: --s .55s cubic-bezier(.16,1,.3,1), --rot .5s cubic-bezier(.2,.8,.2,1); }
+.helm:hover, .helm:focus-within, .helm.open { --s: 360px; }
+/* a soft glow of page colour behind the open wheel, so its labels read clearly over the content */
+.helm::before { content: ''; position: absolute; left: 50%; top: 50%; width: calc(var(--s) + 340px); height: calc(var(--s) + 340px); transform: translate(-50%, -50%);
+  border-radius: 50%; background: radial-gradient(closest-side, var(--bg) 66%, color-mix(in srgb, var(--bg) 70%, transparent) 82%, transparent); opacity: 0; transition: opacity .35s; pointer-events: none; }
+:is(.helm:hover, .helm:focus-within, .helm.open)::before { opacity: 1; }
+.helm-wheel { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; color: var(--ink); transform: rotate(var(--rot));
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,.18)); cursor: pointer; }
+.helm-wheel .rim { fill: none; stroke: currentColor; stroke-width: 11; }
+.helm-wheel .rim-in { fill: none; stroke: var(--bg); stroke-width: 1.6; opacity: .55; }
+.helm-wheel .rim-out { fill: none; stroke: currentColor; stroke-width: 1.6; }
+.helm-wheel .spoke { stroke: currentColor; stroke-width: 6; stroke-linecap: round; }
+.helm-wheel .handle { fill: currentColor; }
+.helm-wheel .collar { fill: currentColor; }
+.helm-wheel .stud { fill: var(--bg); opacity: .8; }
+.helm-wheel .hub { fill: currentColor; }
+.helm-wheel .hub-in { fill: var(--bg); }
+.helm-hub { position: absolute; left: 50%; top: 50%; width: calc(var(--s) * 26 / 220); height: calc(var(--s) * 26 / 220); transform: translate(-50%, -54%); color: var(--ink); pointer-events: none; }
+.helm-hub svg { width: 100%; height: 100%; display: block; }
+/* the handle pointing at the current section */
+.helm-wheel .spk.on .handle, .helm-wheel .spk.on .collar { fill: var(--ink); }
+.helm:not(:hover):not(:focus-within):not(.open) .helm-wheel { opacity: .9; }
+
+/* the clickable slices (only while open): invisible; the handle and label react instead */
+.helm-wheel .hit { fill: transparent; pointer-events: none; cursor: pointer; }
+:is(.helm:hover, .helm:focus-within, .helm.open) .helm-wheel .hit.vis { pointer-events: all; }
+/* the handle under the pointer slides out a little and its spoke thickens */
+.helm-wheel .handle, .helm-wheel .collar { transition: transform .25s cubic-bezier(.3,1.6,.5,1); }
+.helm-wheel .spoke { transition: stroke-width .2s; }
+.helm-wheel .spk.hot .handle, .helm-wheel .spk.hot .collar { transform: translateX(6px); }
+.helm-wheel .spk.hot .spoke { stroke-width: 8; }
+
+/* labels: each one sits at the tip of its handle and stays upright while the wheel turns */
+.helm-labels { position: absolute; inset: 0; pointer-events: none; }
+.helm-label { position: absolute; left: 50%; top: 50%; --R: calc(var(--s) * .5 + 18px);
+  transform: rotate(calc(var(--a) + var(--rot))) translateX(var(--R)) rotate(calc(-1 * (var(--a) + var(--rot)))) translateY(-50%);
+  display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px 9px 12px; white-space: nowrap; pointer-events: none;
+  font: 500 13px/1 'Geist', system-ui, sans-serif; color: var(--ink); background: var(--card); border: 1px solid var(--line);
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 14px, 100% 100%, 0 100%); opacity: 0; transition: opacity .25s, translate .25s cubic-bezier(.3,1.6,.5,1), border-color .2s; cursor: pointer; }
+.helm-label i { font-style: normal; font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+.helm-label.hot { border-color: var(--ink); translate: 6px 0; }
+.helm-label.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.helm-label.on i { color: color-mix(in srgb, var(--bg) 60%, transparent); }
+:is(.helm:hover, .helm:focus-within, .helm.open) .helm-label.vis { opacity: 1; pointer-events: auto; transition-delay: .12s; }
+:is(.helm:hover, .helm:focus-within, .helm.open) .helm-label.vis.edge { opacity: .45; }
+
+/* hidden while the game is running or the phone menu is open */
+html.gm-on .helm, html.menu-locked .helm { display: none; }
+
+/* phones: no wheel (the header menu covers navigation there) */
+@media (max-width: 700px) { .helm { display: none; } }
+@media (prefers-reduced-motion: reduce) { .helm { transition: none; } }

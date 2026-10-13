@@ -1,0 +1,17 @@
+# secrets and local settings: never commit these
+.env
+.env.*
+*.local
+
+# system and editor files
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.sw?
+
+# logs and dependencies (if tools are ever added)
+logs
+*.log
+node_modules
+dist

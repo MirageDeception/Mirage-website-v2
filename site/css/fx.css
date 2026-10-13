@@ -1,0 +1,27 @@
+/* fx: live mesh behind the pitch and floating icons beside the section headings (added by js/fx.js). */
+
+/* ---------- A. live deception mesh behind the pitch ---------- */
+.pitch { position: relative; overflow: hidden; }
+.pitch > .wrap { position: relative; z-index: 1; }
+.fx-mesh { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;
+  /* quieter in the middle, where the headline sits */
+  -webkit-mask-image: radial-gradient(ellipse 46% 42% at 50% 44%, rgba(0,0,0,.18), #000 78%);
+          mask-image: radial-gradient(ellipse 46% 42% at 50% 44%, rgba(0,0,0,.18), #000 78%); }
+
+/* ---------- 2. floating cloud icons beside the section headings ---------- */
+.fx-host { position: relative; }
+.fx-float { position: absolute; z-index: 0; pointer-events: none; display: none; }
+@media (min-width: 1100px) { .fx-float { display: block; } }
+.fx-float .tile { width: 52px; height: 52px; display: grid; place-items: center; color: var(--ink-2); opacity: .5;
+  border: 1.5px solid var(--ink-3); background: var(--bg);
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 20px, 100% 100%, 0 100%);
+  animation: fx-bob var(--bob, 6s) ease-in-out infinite; }
+.fx-float.decoy .tile { background: repeating-linear-gradient(180deg, color-mix(in srgb, var(--ink) 16%, transparent) 0 2px, transparent 2px 5px), var(--bg); }
+.fx-float .tile svg { width: 22px; height: 22px; }
+.fx-float.sm .tile { width: 40px; height: 40px; }
+.fx-float.sm .tile svg { width: 17px; height: 17px; }
+@keyframes fx-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-float .tile { animation: none; }
+}

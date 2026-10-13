@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Team — MIRAGE</title>
+<meta name="description" content="Meet the founders of MIRAGE, the team building the future of cloud deception." />
+<link rel="canonical" href="https://miragedeception.github.io/Mirage-website/team.html" />
+<link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+<meta name="theme-color" content="#f6f3ee" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="MIRAGE" />
+<meta property="og:title" content="Team — MIRAGE" />
+<meta property="og:description" content="Meet the founders of MIRAGE, the team building the future of cloud deception." />
+<meta property="og:url" content="https://miragedeception.github.io/Mirage-website/team.html" />
+<meta property="og:image" content="https://miragedeception.github.io/Mirage-website/img/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://miragedeception.github.io/Mirage-website/img/og-image.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script>
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('mirage-theme'); } catch (e) {}
+    if (!t) t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.dataset.theme = t;
+    // Motion: cover the page with the loader before it paints. Arriving from another page of
+    // the site gets the short version (the curtain just lifts); a fresh visit or reload gets the full build.
+    var d = document.documentElement;
+    if (!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+      d.classList.add('motion', 'is-loading');
+      try {
+        var nav = performance.getEntriesByType('navigation')[0], ref = document.referrer && new URL(document.referrer);
+        if (nav && nav.type === 'navigate' && ref && ref.origin === location.origin && ref.pathname !== location.pathname) d.classList.add('quick-load');
+      } catch (e) {}
+    }
+  })();
+</script>
+<link rel="stylesheet" href="css/base.css" />
+<style>
+  .team { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; max-width: 1000px; margin: 0 auto 120px; align-items: start; }
+  .founder { background: var(--card); clip-path: var(--notch-lg); }
+  /* the frame has the portrait photos' own shape, so the whole picture shows (zoomed out fully) */
+  .founder__photo { position: relative; aspect-ratio: 1102 / 1600; overflow: hidden; }
+  .founder__photo img { width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block; filter: grayscale(.15); transition: filter .4s; }
+  .founder:hover .founder__photo img { filter: none; }
+  /* the photo sits on the horizon, like everything else on the site */
+  .founder__photo::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--horizon); }
+  .founder__body { padding: 28px 30px 30px; }
+  .founder h2 { font-size: 28px; letter-spacing: -0.03em; font-weight: 700; }
+  .role { display: block; font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin: 6px 0 20px; letter-spacing: .02em; }
+  .bio p { color: var(--ink-2); font-size: 16px; line-height: 1.7; }
+  .bio p + p { margin-top: 14px; }
+  .bio .more { display: none; }
+  .founder.open .bio .more { display: block; }
+  .acts { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
+  .toggle { background: none; border: none; font: inherit; font-size: 15px; font-weight: 500; color: var(--ink); cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+  .toggle svg { width: 16px; height: 16px; transition: transform .25s; }
+  .founder.open .toggle svg { transform: rotate(180deg); }
+  @media (max-width: 860px) { .team { grid-template-columns: 1fr; max-width: 520px; } }
+</style>
+<link rel="stylesheet" href="css/motion.css" />
+</head>
+<body>
+<script src="js/loader.js"></script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <clipPath id="twClip"><path d="M26 50 L43 14 L60 50 Z" /></clipPath>
+    <mask id="twCounters" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64"><rect width="64" height="64" fill="#fff" /><path d="M13.03 51 L21 34.12 L28.97 51 Z" fill="#000" /><path d="M35.03 51 L43 34.12 L50.97 51 Z" fill="#000" /></mask>
+    <mask id="twDecoy" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64"><rect width="64" height="64" fill="#fff" /><path d="M4 50 L21 14 L38 50 Z" fill="#000" stroke="#000" stroke-width="3.2" /><rect x="24" y="39.4" width="17.8" height="12" fill="#000" /></mask>
+    <symbol id="twin" viewBox="0 0 64 64">
+      <g mask="url(#twCounters)"><g clip-path="url(#twClip)"><g mask="url(#twDecoy)" fill="currentColor"><rect y="19" width="64" height="3" /><rect y="24.6" width="64" height="3" /><rect y="30.2" width="64" height="3" /><rect y="35.8" width="64" height="3" /><rect y="41.4" width="64" height="3" /><rect y="47" width="64" height="3" /></g></g><path d="M4 50 L21 14 L38 50 Z" fill="currentColor" /></g>
+      <circle cx="43" cy="14.4" r="3.4" fill="#e5372b" />
+    </symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-in" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></symbol>
+  </defs>
+</svg>
+
+<div class="topnav">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><svg><use href="#twin" /></svg>mirage</a>
+    <nav class="links"><a href="index.html">Home</a><a href="blog.html">Blog</a><a class="on" href="team.html">Team</a><a href="https://github.com/MirageDeception/Mirage-OS" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSe5AVpwYU71H6kDp8WC0zUKu3V-4fb2MFaCd5XpxvOoUh7ZUA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Contact us</a></nav>
+    <div class="actions">
+      <button class="theme" id="themeBtn" aria-label="Switch colour theme"><svg class="moon"><use href="#i-moon" /></svg><svg class="sun"><use href="#i-sun" /></svg></button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="horizon"></div>
+</div>
+
+<main class="wrap">
+  <div class="page-head">
+    <h1 class="page">Meet the founders of MIRAGE</h1>
+    <p class="lede">The team building the future of cloud deception.</p>
+  </div>
+
+  <div class="team">
+    <article class="founder">
+      <div class="founder__photo"><img src="img/Arham.jpg" alt="Arham Jain" /></div>
+      <div class="founder__body">
+        <h2>Arham Jain</h2>
+        <span class="role">Detection Engineer at FICO</span>
+        <div class="bio">
+          <p>I am Arham Jain, a cybersecurity researcher and Security Operations Analyst passionate about building technologies that help defenders stay ahead of attackers. My work focuses on cloud security, deception engineering, AI-driven security, and threat detection, with an emphasis on developing practical solutions to modern security challenges.</p>
+          <p class="more">Beyond research, I enjoy mentoring aspiring cybersecurity professionals, contributing to open-source projects, and sharing knowledge through technical writing and community initiatives.</p>
+          <p class="more">I believe cybersecurity is not just about detecting attacks, it's about understanding adversaries, anticipating their next move, and building defenses that make every attack a source of intelligence.</p>
+        </div>
+        <div class="acts">
+          <button class="toggle" aria-expanded="false"><span>Read more</span><svg><use href="#i-chev" /></svg></button>
+          <a class="btn twin sm" href="https://www.linkedin.com/in/arham-jain-64433a175/" target="_blank" rel="noopener noreferrer"><svg width="15" height="15"><use href="#i-in" /></svg>LinkedIn</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="founder">
+      <div class="founder__photo"><img src="img/devanshu.jpg" alt="Devanshu Nagpal" /></div>
+      <div class="founder__body">
+        <h2>Devanshu Nagpal</h2>
+        <span class="role">Red Team Engineer at FICO</span>
+        <div class="bio">
+          <p>I'm Devanshu Nagpal, a Cyber Security Engineer (Red Team) at FICO, working on cloud-native red teaming, Kubernetes/EKS security, and AWS identity exploitation. My day-to-day focuses on auditing multi-account enterprise cloud and Kubernetes environments, and I also have experience with Windows and Active Directory security (CRTE certified).</p>
+          <p class="more">I am an active member of the security community and have shared my work on container security, Kubernetes RBAC attacks, and cloud workload identity at conferences and chapters including the Container Security Village at SEASIDES (Goa) and the OWASP and null Bangalore chapters.</p>
+          <p class="more">I care deeply about bridging offensive security and defensive cloud engineering, and I am always learning as I go.</p>
+        </div>
+        <div class="acts">
+          <button class="toggle" aria-expanded="false"><span>Read more</span><svg><use href="#i-chev" /></svg></button>
+          <a class="btn twin sm" href="https://www.linkedin.com/in/devanshu-nagpal/" target="_blank" rel="noopener noreferrer"><svg width="15" height="15"><use href="#i-in" /></svg>LinkedIn</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</main>
+
+<div class="horizon"></div>
+<footer>
+  <div class="wrap foot">
+    <a class="brand" href="index.html" style="font-size:19px"><svg width="24" height="24"><use href="#twin" /></svg>mirage</a>
+    <nav><a href="https://github.com/MirageDeception/Mirage-OS" target="_blank" rel="noopener noreferrer">GitHub</a><a href="blog.html">Blog</a><a href="team.html">Meet the founders</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSe5AVpwYU71H6kDp8WC0zUKu3V-4fb2MFaCd5XpxvOoUh7ZUA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Contact us</a></nav>
+    <span>© 2026 MIRAGE · Built by Arham Jain &amp; Devanshu Nagpal</span>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.founder .toggle').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.founder');
+      const open = card.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open);
+      btn.querySelector('span').textContent = open ? 'Show less' : 'Read more';
+    });
+  });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="js/motion.js"></script>
+</body>
+</html>

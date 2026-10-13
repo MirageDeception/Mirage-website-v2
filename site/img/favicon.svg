@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="2 0.5 60 60">
+  <!-- MIRAGE mark: dark on light browser tabs, light on dark ones; the red dot stays red -->
+  <style>.ink { fill: #121212; } @media (prefers-color-scheme: dark) { .ink { fill: #ededeb; } }</style>
+  <defs>
+    <clipPath id="c"><path d="M26 50 L43 14 L60 50 Z" /></clipPath>
+    <mask id="n" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64"><rect width="64" height="64" fill="#fff" /><path d="M13.03 51 L21 34.12 L28.97 51 Z" fill="#000" /><path d="M35.03 51 L43 34.12 L50.97 51 Z" fill="#000" /></mask>
+    <mask id="d" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64"><rect width="64" height="64" fill="#fff" /><path d="M4 50 L21 14 L38 50 Z" fill="#000" stroke="#000" stroke-width="3.2" /><rect x="24" y="39.4" width="17.8" height="12" fill="#000" /></mask>
+  </defs>
+  <g class="ink" mask="url(#n)"><g clip-path="url(#c)"><g mask="url(#d)"><rect y="19" width="64" height="3" /><rect y="24.6" width="64" height="3" /><rect y="30.2" width="64" height="3" /><rect y="35.8" width="64" height="3" /><rect y="41.4" width="64" height="3" /><rect y="47" width="64" height="3" /></g></g><path d="M4 50 L21 14 L38 50 Z" /></g>
+  <circle cx="43" cy="14.4" r="3.4" fill="#e5372b" />
+</svg>

@@ -1,0 +1,1063 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MIRAGE — Deceive. Detect. Defend.</title>
+<meta name="description" content="MIRAGE is an open-source proactive defense platform being developed to deliver a dynamic multi-cloud deception mesh. It aims to break AI attack automation, detect lateral movement, and reduce dwell time." />
+<link rel="canonical" href="https://miragedeception.github.io/Mirage-website/" />
+<link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+<meta name="theme-color" content="#f6f3ee" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="MIRAGE" />
+<meta property="og:title" content="MIRAGE — Deceive. Detect. Defend." />
+<meta property="og:description" content="MIRAGE is an open-source proactive defense platform being developed to deliver a dynamic multi-cloud deception mesh. It aims to break AI attack automation, detect lateral movement, and reduce dwell time." />
+<meta property="og:url" content="https://miragedeception.github.io/Mirage-website/" />
+<meta property="og:image" content="https://miragedeception.github.io/Mirage-website/img/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://miragedeception.github.io/Mirage-website/img/og-image.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script>
+  // Theme before first paint: saved choice, else the system setting.
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('mirage-theme'); } catch (e) {}
+    if (!t) t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.dataset.theme = t;
+    // Motion: cover the page with the loader before it paints. Arriving from another page of
+    // the site gets the short version (the curtain just lifts); a fresh visit or reload gets the full build.
+    var d = document.documentElement;
+    if (!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+      d.classList.add('motion', 'is-loading');
+      try {
+        var nav = performance.getEntriesByType('navigation')[0], ref = document.referrer && new URL(document.referrer);
+        if (nav && nav.type === 'navigate' && ref && ref.origin === location.origin && ref.pathname !== location.pathname) d.classList.add('quick-load');
+      } catch (e) {}
+    }
+  })();
+</script>
+<style>
+  :root {
+    --bg: #f6f3ee;
+    --bg-2: #eee8de;
+    --card: #fbf9f5;
+    --ink: #121212;
+    --ink-2: #57534e;
+    --ink-3: #8a847c;
+    --line: #e2dbd0;
+    --horizon: rgba(18, 18, 18, .3);
+    --nav-bg: rgba(246, 243, 238, .88);
+    --arch-bg: #0b0b0c;
+    --term-bg: #0b0b0c;
+    --red: #e5372b;
+    --mono: 'Geist Mono', ui-monospace, monospace;
+    --notch: polygon(0 0, calc(100% - 13px) 0, 100% 27px, 100% 100%, 0 100%);
+    --notch-lg: polygon(0 0, calc(100% - 22px) 0, 100% 46px, 100% 100%, 0 100%);
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b0b0c;
+    --bg-2: #18181b;
+    --card: #151517;
+    --ink: #ededeb;
+    --ink-2: #a3a3a8;
+    --ink-3: #6f6f75;
+    --line: #2a2a2e;
+    --horizon: rgba(237, 237, 235, .28);
+    --nav-bg: rgba(11, 11, 12, .85);
+    --arch-bg: #111113;
+    --term-bg: #151517;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { overflow-x: clip; }
+  body { background: var(--bg); color: var(--ink); font-family: 'Geist', system-ui, sans-serif; -webkit-font-smoothing: antialiased; transition: background .3s, color .3s; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+  /* ---------- signature pieces ---------- */
+  .label { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: var(--ink-2); }
+  .glyph { display: inline-flex; gap: 2px; }
+  .glyph i { width: 9px; height: 9px; background: var(--ink); }
+  .glyph i + i { background: transparent; box-shadow: inset 0 0 0 1.5px var(--ink); }
+  .horizon { height: 1px; width: 100vw; margin-left: calc(50% - 50vw); background: var(--horizon); }
+  .btn { display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 30px 0 22px; font-size: 15px; font-weight: 500; clip-path: var(--notch); transition: transform .2s; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn.ink { background: var(--ink); color: var(--bg); }
+  .btn.twin { background: var(--bg-2); color: var(--ink); }
+  .btn.sm { height: 40px; padding: 0 24px 0 16px; font-size: 14px; clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 21px, 100% 100%, 0 100%); }
+
+  h2 { font-size: 52px; line-height: 1.04; letter-spacing: -0.04em; font-weight: 700; margin: 0 0 16px; }
+  .lede { font-size: 18px; line-height: 1.65; color: var(--ink-2); max-width: 60ch; }
+  section { padding: 120px 0; }
+  .head-c { text-align: center; display: flex; flex-direction: column; align-items: center; margin-bottom: 64px; }
+
+  /* ---------- nav ---------- */
+  .topnav { position: sticky; top: 0; z-index: 20; background: var(--nav-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  .nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 68px; }
+  .nav > .actions { grid-column: 3; justify-self: end; } /* stays right even when the middle links are hidden on phones */
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 22px; letter-spacing: -0.035em; }
+  .brand svg { width: 30px; height: 30px; }
+  .links { display: flex; gap: 30px; font-size: 14.5px; color: var(--ink-2); }
+  .links a:hover, .links a.on { color: var(--ink); }
+  .links a.on { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1.5px; }
+  .actions { display: flex; gap: 12px; align-items: center; }
+  .gh { font-size: 14px; color: var(--ink-2); }
+  .theme { width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 16px, 100% 100%, 0 100%); }
+  .theme svg { width: 17px; height: 17px; }
+  .theme .sun { display: none; }
+  :root[data-theme="dark"] .theme .sun { display: block; }
+  :root[data-theme="dark"] .theme .moon { display: none; }
+
+  /* ---------- hero ---------- */
+  .hero { padding: 72px 0 0; text-align: center; }
+  .hero .label { margin-bottom: 30px; }
+  .scene { display: flex; justify-content: center; margin-bottom: 44px; }
+  .tilt { position: relative; width: 230px; height: calc(230px * 50 / 64); }
+  .tilt svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; color: var(--ink); }
+  .ring { fill: none; stroke: var(--red); stroke-width: .7; opacity: 0; animation: ping 3s cubic-bezier(.2,.7,.3,1) infinite; }
+  .ring.r2 { animation-delay: .7s; }
+  @keyframes ping { 0% { r: 3.4; opacity: .9; } 75%, 100% { r: 15; opacity: 0; } }
+  .shim rect { animation: shimmer 3.2s ease-in-out infinite; }
+  .shim rect:nth-child(even) { animation-delay: .4s; --dx: -.7px; }
+  .shim rect:nth-child(odd) { --dx: .7px; }
+  @keyframes shimmer { 0%,100% { transform: translateX(0); } 50% { transform: translateX(var(--dx)); } }
+  h1, .reflect { font-size: 104px; line-height: .86; letter-spacing: -0.055em; font-weight: 700; }
+  .reflect { transform: scaleY(-.58) translateY(-100%); transform-origin: top; margin-top: 2px; margin-bottom: -36px; pointer-events: none; user-select: none;
+    color: transparent; background: repeating-linear-gradient(180deg, var(--ink) 0 6px, transparent 6px 11px); -webkit-background-clip: text; background-clip: text;
+    -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,.42), rgba(0,0,0,.18) 55%, transparent); mask-image: linear-gradient(to top, rgba(0,0,0,.42), rgba(0,0,0,.18) 55%, transparent);
+    animation: haze 4s ease-in-out infinite; }
+  @keyframes haze { 0%,100% { translate: 0 0; } 50% { translate: 3px 0; } }
+  .hero .sub { font-size: 19px; line-height: 1.6; color: var(--ink-2); max-width: 640px; margin: 22px auto 0; }
+  .hero .cta { display: flex; gap: 12px; justify-content: center; margin: 30px 0 110px; flex-wrap: wrap; }
+
+  /* ---------- problem ---------- */
+  .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .panel { background: var(--card); clip-path: var(--notch-lg); display: flex; flex-direction: column; }
+  .panel__vis { height: 196px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--line); }
+  .panel__body { padding: 26px 26px 30px; }
+  .panel h3 { font-size: 21px; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .panel p { color: var(--ink-2); font-size: 15.5px; line-height: 1.65; }
+  .ps-vis { width: 100%; height: 100%; padding: 12px; color: var(--ink); }
+  .ps-edge { stroke: currentColor; stroke-opacity: .16; stroke-width: 1; }
+  .ps-node { fill: var(--card); stroke: currentColor; stroke-opacity: .55; stroke-width: 1.5; }
+  .ps-node.hit { stroke: var(--red); stroke-opacity: 1; }
+  .ps-node.target { fill: currentColor; fill-opacity: .12; stroke-opacity: 1; }
+  .ps-path { fill: none; stroke: var(--red); stroke-width: 1.5; stroke-dasharray: 4 4; animation: dash 1.2s linear infinite; }
+  @keyframes dash { to { stroke-dashoffset: -16; } }
+  .ps-attacker { fill: var(--red); }
+  .ps-label { fill: var(--ink-3); font-family: 'Geist Mono', monospace; font-size: 9px; }
+  .flood { position: absolute; inset: 0; -webkit-mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent); mask-image: linear-gradient(180deg, transparent, #000 22%, #000 78%, transparent); }
+  .flood__track { display: flex; flex-direction: column; gap: 6px; padding: 0 22px; animation: scroll 14s linear infinite; }
+  @keyframes scroll { to { transform: translateY(calc(-50% - 3px)); } }
+  .flood__row { display: flex; gap: 12px; padding: 6px 10px; background: var(--bg); border: 1px solid var(--line); font-family: var(--mono); font-size: 11px; color: var(--ink-3); white-space: nowrap; text-align: left; }
+  .flood__row em { font-style: normal; width: 32px; flex-shrink: 0; }
+  .flood__row.hit { border-color: var(--red); color: var(--ink); }
+  .flood__row.hit em { color: var(--red); }
+  .flood__count { position: absolute; right: 12px; bottom: 10px; z-index: 2; font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); background: var(--card); border: 1px solid var(--line); padding: 2px 9px; border-radius: 999px; }
+  .flood__count b { color: var(--ink); font-weight: 500; }
+
+  /* ---------- process ---------- */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink); }
+  .step { padding: 22px 26px 26px 0; cursor: pointer; position: relative; opacity: .42; transition: opacity .3s; }
+  .step.on { opacity: 1; }
+  .step .n { font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+  .step h3 { font-size: 20px; letter-spacing: -0.02em; margin: 8px 0; }
+  .step p { color: var(--ink-2); font-size: 15px; line-height: 1.6; }
+  .step .bar { position: absolute; left: 0; top: -2px; height: 3px; width: 0; background: var(--ink); }
+  .step.on .bar { animation: fill 4s linear forwards; }
+  @keyframes fill { to { width: 100%; } }
+  .graph { position: relative; height: 420px; margin-top: 34px; background: var(--card); clip-path: var(--notch-lg); }
+  .graph__inner { position: absolute; inset: 64px 48px 40px; }
+  .graph svg.edges { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .edges line { stroke: var(--ink); stroke-opacity: .35; stroke-width: 1.2; transition: opacity 1s ease var(--d, 0s); }
+  .edges .decoy line { stroke-dasharray: 3 4; }
+  .node { position: absolute; width: 26px; height: 26px; border-radius: 50%; transform: translate(-50%,-50%); transition: transform .8s cubic-bezier(.2,.8,.2,1), opacity .8s; }
+  .node.real { background: var(--ink); }
+  .node.decoy { border: 1.5px solid var(--ink); background: repeating-linear-gradient(180deg, var(--ink) 0 2px, transparent 2px 4.5px); }
+  .graph.p0 .node.decoy, .graph.p0 .edges .decoy line { opacity: 0; }
+  .graph.p0 .node.decoy { transform: translate(-50%,-50%) scale(.3); }
+  .graph.p2 .edges line { opacity: 0; }
+  /* step 3: to the attacker every resource looks real, so decoys turn solid too */
+  .graph.p2 .node.decoy { background: var(--ink); }
+  .graph__tag { position: absolute; left: 26px; top: 22px; font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+  .graph__key { position: absolute; right: 40px; top: 22px; display: flex; gap: 18px; font-size: 13px; color: var(--ink-2); }
+  .graph__key i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; vertical-align: -1px; margin-right: 6px; }
+
+  /* ---------- architecture (ported from the built redesign) ---------- */
+  .archsec { background: var(--arch-bg); color: #f4f4f5; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .archsec h2 { color: #f4f4f5; }
+  .archsec .lede { color: #a1a1aa; }
+  .archsec .label { color: #a1a1aa; }
+  .archsec .glyph i { background: #f4f4f5; }
+  .archsec .glyph i + i { background: transparent; box-shadow: inset 0 0 0 1.5px #f4f4f5; }
+  .arch-diagram { --arch-cycle: 6s; display: grid; grid-template-columns: 250px minmax(48px,1fr) minmax(0,3fr); grid-template-rows: auto repeat(3, auto); row-gap: .75rem; padding: 2rem; border: 1px solid #1f1f22; border-radius: 12px; background: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px) 0 0 / 22px 22px, #0c0c0d; }
+  .arch-tier { display: block; font-family: var(--mono); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: #71717a; margin-bottom: .9rem; }
+  .arch-spokes { display: contents; }
+  .arch-spokes > .arch-tier { grid-column: 1; grid-row: 1; margin-bottom: .15rem; }
+  .arch-spoke:nth-child(2) { grid-column: 1; grid-row: 2; } .arch-spoke:nth-child(3) { grid-column: 1; grid-row: 3; } .arch-spoke:nth-child(4) { grid-column: 1; grid-row: 4; }
+  .arch-spoke { border: 1px solid #2e2e33; border-radius: 10px; padding: .8rem .9rem; background: #141416; }
+  .arch-spoke__name { display: flex; align-items: center; gap: .5rem; font-family: var(--mono); font-size: .78rem; color: #f4f4f5; margin-bottom: .6rem; }
+  .arch-spoke__dot { width: 6px; height: 6px; border-radius: 50%; background: #d4d4d8; }
+  .arch-spoke__decoys { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .arch-chip { display: inline-flex; align-items: center; gap: .35rem; font-family: var(--mono); font-size: .68rem; padding: .2rem .5rem; border-radius: 6px; border: 1px dashed rgba(239,68,68,.35); color: #fca5a5; background: rgba(239,68,68,.08); }
+  .arch-chip svg { width: 12px; height: 12px; }
+  .arch-chip.is-touched { animation: arch-touch var(--arch-cycle) ease-out infinite; }
+  @keyframes arch-touch { 0%,100% { border-color: rgba(239,68,68,.35); box-shadow: none; } 2%,10% { border-color: #ef4444; border-style: solid; box-shadow: 0 0 14px rgba(239,68,68,.55); color: #fff; } 20% { border-color: rgba(239,68,68,.35); box-shadow: none; } }
+  .arch-connector { position: relative; flex: 1 1 56px; min-width: 48px; display: flex; align-items: center; justify-content: center; }
+  .arch-connector--1 { grid-column: 2; grid-row: 2; align-self: center; height: 100%; }
+  .arch-connector__line { position: relative; width: 100%; height: 1px; background: #2e2e33; }
+  .arch-connector__line::after { content: ''; position: absolute; right: -1px; top: -3px; border: 3.5px solid transparent; border-left: 5px solid #2e2e33; }
+  .arch-connector__packet { position: absolute; top: -2.5px; left: 0; width: 6px; height: 6px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 8px #ef4444; opacity: 0; animation: var(--arch-cycle) linear infinite; }
+  .arch-connector--1 .arch-connector__packet { animation-name: pk-long; animation-delay: .6s; }
+  .arch-connector--2 .arch-connector__packet { animation-name: pk-short; animation-delay: 2s; }
+  .arch-connector--3 .arch-connector__packet { animation-name: pk-short; animation-delay: 3.2s; }
+  @keyframes pk-long { 0% { left: 0; opacity: 1; } 16.6% { left: calc(100% - 6px); opacity: 1; } 17%,100% { left: calc(100% - 6px); opacity: 0; } }
+  @keyframes pk-short { 0% { left: 0; opacity: 1; } 13.2% { left: calc(100% - 6px); opacity: 1; } 13.6%,100% { left: calc(100% - 6px); opacity: 0; } }
+  .arch-connector__label { position: absolute; top: calc(50% + .5rem); left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: .62rem; color: #71717a; white-space: nowrap; }
+  .arch-hub { grid-column: 3; grid-row: 1 / span 4; border: 1px dashed #2e2e33; border-radius: 12px; padding: 1.1rem 1.25rem 1.25rem; display: flex; flex-direction: column; }
+  .arch-hub__flow { flex: 1; display: flex; align-items: center; }
+  .arch-node { flex: 2 1 0; min-width: 0; display: flex; flex-direction: column; gap: .35rem; padding: 1rem; border: 1px solid #2e2e33; border-radius: 10px; background: #141416; }
+  .icon-tile { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 10px; margin-bottom: .4rem; background: rgba(255,255,255,.04); border: 1px solid #2e2e33; color: #d4d4d8; }
+  .icon-tile svg { width: 18px; height: 18px; }
+  .arch-node--alert { border-color: rgba(239,68,68,.35); animation: alert-fire var(--arch-cycle) ease-out infinite 4s; }
+  .arch-node--alert .icon-tile { background: rgba(239,68,68,.08); border-color: rgba(239,68,68,.35); color: #ef4444; }
+  .arch-node--alert .icon-tile::after { content: ''; position: absolute; inset: -1px; border-radius: inherit; border: 1.5px solid #ef4444; opacity: 0; animation: alert-ring var(--arch-cycle) ease-out infinite 4s; }
+  .arch-node__title { font-weight: 600; font-size: .95rem; color: #f4f4f5; }
+  .arch-node__sub { font-size: .8rem; color: #71717a; line-height: 1.4; }
+  .arch-node--bus, .arch-node--brain { animation: node-recv var(--arch-cycle) ease-out infinite; }
+  .arch-node--bus { animation-delay: 1.6s; } .arch-node--brain { animation-delay: 2.8s; }
+  @keyframes node-recv { 0% { border-color: #ef4444; box-shadow: 0 0 0 1px rgba(239,68,68,.35), 0 0 18px rgba(239,68,68,.25); } 6.6% { border-color: rgba(239,68,68,.35); box-shadow: 0 0 10px rgba(239,68,68,.12); } 14%,100% { border-color: #2e2e33; box-shadow: none; } }
+  @keyframes alert-fire { 0%,10% { border-color: #ef4444; background: rgba(239,68,68,.1); box-shadow: 0 0 24px rgba(239,68,68,.35); } 16.6%,100% { border-color: rgba(239,68,68,.35); background: #141416; box-shadow: none; } }
+  @keyframes alert-ring { 0% { transform: scale(1); opacity: .9; } 16.6% { transform: scale(1.9); opacity: 0; } 100% { opacity: 0; } }
+  .arch-notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 2.5rem; }
+  .arch-note { display: flex; gap: .9rem; }
+  .arch-note > svg { width: 18px; height: 18px; color: #ef4444; flex-shrink: 0; margin-top: .15rem; }
+  .arch-note h3 { font-size: 1rem; margin-bottom: .35rem; color: #f4f4f5; }
+  .arch-note p { font-size: .9rem; color: #a1a1aa; line-height: 1.6; }
+
+  /* ---------- comparison ---------- */
+  .cmp { display: grid; grid-template-columns: 200px 1fr 1fr; }
+  .cmp > div { padding: 22px 24px; font-size: 15.5px; line-height: 1.6; }
+  .cmp .h { font-size: 14px; font-weight: 600; padding-top: 18px; padding-bottom: 18px; }
+  .cmp .asp { font-weight: 600; border-top: 1px solid var(--line); padding-left: 0; }
+  .cmp .old { color: var(--ink-2); background: var(--bg-2); border-top: 1px solid var(--bg); }
+  .cmp .new { background: var(--ink); color: color-mix(in srgb, var(--bg) 78%, transparent); border-top: 1px solid color-mix(in srgb, var(--bg) 12%, var(--ink)); }
+  .cmp .new strong { color: var(--bg); }
+  .cmp .h.old, .cmp .h.new { clip-path: var(--notch); }
+  .cmp .h.new { color: var(--bg); }
+
+  /* ---------- advantages ---------- */
+  .adv { background: var(--card); clip-path: var(--notch-lg); padding: 30px; }
+  .adv .n { font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+  .adv h3 { font-size: 22px; letter-spacing: -0.02em; margin: 40px 0 12px; }
+  .adv p { color: var(--ink-2); font-size: 15.5px; line-height: 1.65; }
+
+  /* ---------- coverage ---------- */
+  .road { display: grid; grid-template-columns: repeat(5, 1fr); position: relative; }
+  .road::before { content: ''; position: absolute; left: 0; right: 0; top: 112px; height: 1px; background: var(--horizon); }
+  .pack { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 10px; }
+  .pack .logo { height: 96px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  /* same treatment as the current site: full-colour logo with a white outline that follows its shape */
+  .pack img { max-height: 64px; max-width: 120px; object-fit: contain; filter: url(#solid-white-outline); }
+  /* planned packs are shown in black and white; only what's available today is in colour */
+  .pack:not(.live) img { filter: grayscale(1) url(#solid-white-outline); }
+  .pack b { font-size: 16px; margin-top: 14px; }
+  .pack span { font-size: 13px; color: var(--ink-3); margin-top: 4px; line-height: 1.45; }
+  .pack .st { font-style: normal; margin-top: 10px; font-size: 12px; padding: 3px 10px; background: var(--bg-2); color: var(--ink-2); }
+  .pack.live .st { background: var(--ink); color: var(--bg); }
+
+  /* ---------- quickstart ---------- */
+  .qs { display: grid; grid-template-columns: 1fr 1.15fr; gap: 64px; align-items: center; }
+  .term { background: var(--term-bg); color: #ededeb; border: 1px solid var(--line); font-family: var(--mono); font-size: 13.5px; line-height: 2; padding: 26px 28px; clip-path: var(--notch-lg); overflow-x: auto; }
+  .term .c { color: #8f8f94; }
+  .term .p { color: var(--red); margin-right: 10px; }
+  .term .v { color: #fca5a5; }
+  /* quickstart: not public yet */
+  .term.soon { display: flex; flex-direction: column; justify-content: center; min-height: 250px; padding: 34px 36px; font-family: 'Geist', system-ui, sans-serif; line-height: 1.5; }
+  .term.soon .soon-k { font-family: var(--mono); font-size: 13.5px; color: #8f8f94; }
+  .term.soon h3 { font-size: 48px; line-height: 1.05; letter-spacing: -0.04em; font-weight: 700; color: #f4f4f5; margin: 14px 0 12px; display: flex; align-items: center; gap: 10px; }
+  .term.soon .cursor { width: 14px; height: 40px; background: var(--red); animation: soon-blink 1.1s steps(1) infinite; }
+  @keyframes soon-blink { 50% { opacity: 0; } }
+  .term.soon p { font-size: 16px; color: #a3a3a8; }
+  .term div { white-space: pre; }
+
+  .pitch { text-align: center; padding-bottom: 0; }
+  .pitch p { margin: 0 auto; }
+  .pitch .cta { display: flex; gap: 12px; justify-content: center; margin: 32px 0 120px; flex-wrap: wrap; } /* bottom space = the section's top padding above the heading */
+  footer { padding: 34px 0 48px; }
+  .foot { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; font-size: 14px; color: var(--ink-3); }
+  .foot nav { display: flex; gap: 24px; }
+
+  /* ---------- alerting explainer, ported from the DOAR site ---------- */
+  /* surfaces and text follow the Mirage theme; the animation keeps DOAR's own colours */
+  .ar-anim { --surface: var(--card); --surface-2: var(--bg); --border: var(--line); --text: var(--ink); --muted: var(--ink-2); --dim: var(--ink-3);
+             --accent: #3b82f6; --t1: #3b82f6; --t4: #ef4444; --strong: #22c55e; }
+  /* ---- pillar explainer animations (drawn, no video file) ---- */
+  .ar-anim{margin:0 auto;max-width:820px}
+  .ar-anim svg{display:block;width:100%;aspect-ratio:16/9;background:var(--surface);clip-path:var(--notch-lg);color:var(--ink)}
+  .ar-anim text{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+  .ar-anim .sc,.ar-anim .stage>g,.ar-anim .scale{opacity:0}
+  .ar-anim .sc.on,.ar-anim .stage>g.on,.ar-anim .scale.on{opacity:1}
+  .ar-anim .sc,.ar-anim .stage>g,.ar-anim .scale,.ar-anim .node rect,.ar-anim .node .ic,
+  .ar-anim .rung rect,.ar-anim .rung text,.ar-anim .boundary{transition:opacity .45s ease,fill .5s ease,stroke .5s ease}
+  .ar-anim-cap{margin:10px 2px 0;min-height:2.6em;font-size:.9rem;color:var(--muted)}
+  .ar-anim-ctl{display:flex;align-items:center;gap:10px;margin-top:6px}
+  .ar-anim-play{appearance:none;-webkit-appearance:none;background:transparent;cursor:pointer;
+    border:1px solid var(--border);border-radius:7px;color:var(--muted);width:26px;height:26px;
+    font-size:.62rem;line-height:1;display:flex;align-items:center;justify-content:center}
+  .ar-anim-play:hover{color:var(--text);border-color:var(--accent)}
+  .ar-anim-dots{display:flex;gap:6px}
+  .ar-anim-dots button{appearance:none;-webkit-appearance:none;cursor:pointer;padding:0;
+    width:7px;height:7px;border-radius:50%;border:1px solid var(--dim);background:transparent}
+  .ar-anim-dots button[aria-selected="true"]{background:var(--accent);border-color:var(--accent)}
+  .ar-anim-note{margin-left:auto}
+  
+  /* shared by both animations: the world, its people and their hardware */
+  .ar-anim .divider{stroke:var(--border);stroke-width:1;stroke-dasharray:4 6}
+  .ar-anim .figure .head,.ar-anim .figure .body{fill:none;stroke:var(--muted);stroke-width:1.8}
+  .ar-anim .laptop .screen,.ar-anim .laptop .base{fill:var(--surface-2);stroke:var(--border);stroke-width:1.5}
+  .ar-anim .pnode rect{fill:var(--surface-2);stroke:var(--t1);stroke-width:1.5}
+  .ar-anim .pnode .ic{fill:none;stroke:var(--t1);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+  .ar-anim .wire{fill:none;stroke-width:1.5;stroke-dasharray:3 5;opacity:0}
+  .ar-anim .term .tl{fill:var(--strong);opacity:.42}
+  .ar-anim .note rect{fill:var(--surface);stroke:var(--strong);stroke-width:1.4}
+  .ar-anim .note .dot{fill:var(--strong)}
+  .ar-anim .note .ln{fill:var(--muted);opacity:.65}
+  .ar-anim .lbl{font-size:10px;fill:var(--dim);text-anchor:middle}
+  
+  /* alerting — six-scene story: build the estate, hide the decoys, trip one, follow the alert */
+  .ar-anim .hd tspan{font-size:13px;font-weight:700;fill:var(--text);opacity:0;letter-spacing:.01em}
+  .ar-anim[data-scene="1"] .hd .h1,.ar-anim[data-scene="2"] .hd .h2,.ar-anim[data-scene="3"] .hd .h3,
+  .ar-anim[data-scene="4"] .hd .h4,.ar-anim[data-scene="5"] .hd .h5,.ar-anim[data-scene="6"] .hd .h6{opacity:1}
+  
+  /* the estate: blue is real, red is a decoy — but only while the defender is looking */
+  .ar-anim .node rect,.ar-anim .pnode rect{fill:var(--surface-2);stroke:var(--t1);stroke-width:1.5}
+  .ar-anim .node .ic,.ar-anim .pnode .ic{fill:none;stroke:var(--t1);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+  .ar-anim[data-scene="2"] .node.decoy rect{stroke:var(--t4);fill:var(--t4);fill-opacity:.1}
+  .ar-anim[data-scene="2"] .node.decoy .ic{stroke:var(--t4)}
+  .ar-anim .node{opacity:0}
+  .ar-anim[data-scene="1"] .node.real{animation:al-in .5s ease-out forwards var(--d)}
+  .ar-anim[data-scene="2"] .node.real,.ar-anim[data-scene="3"] .node,
+  .ar-anim[data-scene="2"] .node.decoy{opacity:1}
+  .ar-anim[data-scene="2"] .node.decoy{animation:al-drop .55s cubic-bezier(.3,1.5,.5,1) backwards var(--d)}
+  .ar-anim[data-scene="1"] .node.decoy{opacity:0;animation:none}
+  @keyframes al-in{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+  @keyframes al-drop{from{opacity:0;transform:translateY(-26px) scale(.9)}to{opacity:1;transform:none}}
+  .ar-anim .node{transform-box:fill-box;transform-origin:center}
+  
+  /* scene 3: a sweep passes and the decoys stop looking like decoys */
+  .ar-anim .sweep rect{fill:var(--t1);fill-opacity:.12}
+  .ar-anim .sweep{opacity:0}
+  .ar-anim[data-scene="3"] .sweep{opacity:1;animation:al-sweep 1.7s ease-in-out forwards}
+  @keyframes al-sweep{from{transform:translateX(0)}to{transform:translateX(790px)}}
+  
+  /* scenes 4-5 share one 1280-wide world; scene 5 pans the camera right */
+  .ar-anim .world{transition:transform 1.1s cubic-bezier(.65,0,.35,1)}
+  .ar-anim[data-scene="5"] .world{transform:translateX(-640px)}
+  /* the attacker's terminal: dim, small, scrolling — deliberately unlike the alert */
+  .ar-anim .term .tl{fill:var(--strong);opacity:.42;animation:al-type 2.6s steps(1) infinite var(--d)}
+  @keyframes al-type{0%,45%{opacity:0}50%,100%{opacity:.42}}
+  .ar-anim[data-scene="5"] .term .tl{opacity:.16;animation:none}
+  
+  /* the probe: three real resources answer, the fourth gives itself away */
+  .ar-anim .probe{fill:none;stroke:var(--strong);stroke-width:1.6;opacity:.5;
+    stroke-dasharray:300;stroke-dashoffset:300}
+  .ar-anim .probe.hit{stroke-width:2.2;opacity:.9}
+  .ar-anim[data-scene="4"] .p1{animation:al-reach .7s ease-out forwards .2s}
+  .ar-anim[data-scene="4"] .p2{animation:al-reach .7s ease-out forwards 1.1s}
+  .ar-anim[data-scene="4"] .p3{animation:al-reach .7s ease-out forwards 2.0s}
+  .ar-anim[data-scene="4"] .p4{animation:al-reach .7s ease-out forwards 2.9s}
+  .ar-anim[data-scene="5"] .probe{stroke-dashoffset:0;opacity:.28}
+  .ar-anim[data-scene="5"] .p4{opacity:.6}
+  @keyframes al-reach{from{stroke-dashoffset:300}to{stroke-dashoffset:0}}
+  .ar-anim .pnode rect{transition:stroke .25s ease,fill .25s ease}
+  .ar-anim[data-scene="4"] .n0 rect{animation:al-tap 1s ease-out .7s}
+  .ar-anim[data-scene="4"] .n5 rect{animation:al-tap 1s ease-out 1.6s}
+  .ar-anim[data-scene="4"] .n6 rect{animation:al-tap 1s ease-out 2.5s}
+  @keyframes al-tap{0%,100%{fill:var(--surface-2)}40%{fill:var(--t1);fill-opacity:.28}}
+  /* the decoy snaps red the moment it is touched, and stays red */
+  .ar-anim[data-anim="alerting"][data-scene="4"] .pnode.trap rect{animation:al-trip .5s ease-out forwards 3.5s}
+  .ar-anim[data-anim="alerting"][data-scene="4"] .pnode.trap .ic{animation:al-trip-ic .5s ease-out forwards 3.5s}
+  .ar-anim[data-anim="alerting"][data-scene="5"] .pnode.trap rect{stroke:var(--t4);fill:var(--t4);fill-opacity:.14}
+  .ar-anim[data-anim="alerting"][data-scene="5"] .pnode.trap .ic{stroke:var(--t4)}
+  @keyframes al-trip{to{stroke:var(--t4);fill:var(--t4);fill-opacity:.14}}
+  @keyframes al-trip-ic{to{stroke:var(--t4)}}
+  
+  /* the signal: bright, glowing, travelling a drawn wire — the loud cousin of the terminal green */
+  .ar-anim .wire{fill:none;stroke:var(--strong);stroke-width:1.5;opacity:0;stroke-dasharray:3 5}
+  .ar-anim[data-scene="5"] .wire{opacity:.45}
+  .ar-anim .sig,.ar-anim .sig-glow{opacity:0}
+  .ar-anim .sig{fill:var(--strong)}
+  .ar-anim[data-scene="4"] .sig,.ar-anim[data-scene="4"] .sig-glow{animation:al-sig-born 1.1s ease-out forwards 3.5s}
+  @keyframes al-sig-born{0%{opacity:0;cx:468px;cy:204px}30%{opacity:1}100%{opacity:1;cx:468px;cy:204px}}
+  .ar-anim[data-scene="5"] .sig,.ar-anim[data-scene="5"] .sig-glow{animation:al-travel 1.5s cubic-bezier(.4,0,.5,1) forwards}
+  @keyframes al-travel{from{opacity:1;cx:468px;cy:204px}to{opacity:1;cx:902px;cy:204px}}
+  
+  /* the defender's screen lights up */
+  .ar-anim .laptop .screen.lit{transition:stroke .4s ease}
+  .ar-anim[data-scene="5"] .laptop .screen.lit{stroke:var(--strong)}
+  .ar-anim .note{opacity:0}
+  .ar-anim .note rect{fill:var(--surface);stroke:var(--strong);stroke-width:1.4}
+  .ar-anim .note .dot{fill:var(--strong)}
+  .ar-anim .note .ln{fill:var(--muted);opacity:.65}
+  .ar-anim[data-scene="5"] .note{animation:al-note .5s ease-out forwards 1.25s}
+  @keyframes al-note{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+  .ar-anim .ping{fill:none;stroke:var(--strong);stroke-width:2;opacity:0}
+  .ar-anim[data-scene="5"] .ping{animation:al-ping 1.5s ease-out infinite 1.4s}
+  @keyframes al-ping{from{r:14;opacity:.7}to{r:52;opacity:0}}
+  .ar-anim .lbl{font-size:10px;fill:var(--dim);text-anchor:middle;opacity:0}
+  .ar-anim[data-scene="5"] .lbl{animation:al-in .4s ease-out forwards 1.5s}
+  
+  
+  /* Mirage overrides on top of the DOAR styles */
+  /* the deception-process diagram also uses .node; keep its dot styling out of this SVG */
+  .ar-anim .node { position: static; width: auto; height: auto; border: none; border-radius: 0; background: none; transform: none; transition: opacity .45s ease; }
+  .ar-anim text { font-family: var(--mono); }
+  .ar-anim .hd tspan { font-family: 'Geist', sans-serif; font-size: 15px; letter-spacing: -0.01em; }
+  .ar-anim .ar-anim-cap { text-align: center; font-size: 19px; line-height: 1.5; color: var(--ink); font-weight: 500; letter-spacing: -0.01em; max-width: 46ch; margin: 22px auto 0; min-height: 3em; }
+  .ar-anim .ar-anim-ctl { justify-content: center; margin-top: 10px; }
+  .ar-anim .ar-anim-play { border-radius: 0; clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 12px, 100% 100%, 0 100%); }
+  .ar-anim .ar-anim-dots button { border-radius: 0; width: 22px; height: 3px; border: none; background: var(--line); }
+  .ar-anim .ar-anim-dots button[aria-selected="true"] { background: var(--accent); }
+
+  [data-tilt] { transition: transform .25s ease-out; will-change: transform; }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+  @media (max-width: 960px) {
+    .wrap { padding: 0 16px; }
+    .links, .gh { display: none; }
+    h1, .reflect { font-size: 52px; }
+    .reflect { margin-bottom: -18px; }
+    h2 { font-size: 36px; }
+    section { padding: 84px 0; }
+    .pitch .cta { margin-bottom: 84px; }
+    .tilt { width: 160px; height: calc(160px * 50 / 64); }
+    .scene { margin-bottom: 32px; }
+    .three, .qs { grid-template-columns: 1fr; }
+    .term.soon { min-height: 0; padding: 28px 24px; }
+    .term.soon h3 { font-size: 34px; }
+    .term.soon .cursor { width: 10px; height: 28px; }
+    .steps { grid-template-columns: 1fr; } .step { padding: 18px 0; }
+    .graph { height: 340px; } .graph__inner { inset: 60px 26px 30px; }
+    .graph__key { right: 24px; }
+    .arch-diagram, .arch-hub__flow { display: flex; flex-direction: column; align-items: stretch; }
+    .arch-diagram { padding: 1.25rem; }
+    .arch-spokes { display: flex; flex-direction: column; gap: .75rem; }
+    .arch-hub, .arch-node { flex: none; }
+    .arch-connector, .arch-connector--1 { flex: none; height: 56px; }
+    .arch-connector__line { width: 1px; height: 100%; }
+    .arch-connector__line::after { right: auto; left: -3px; top: auto; bottom: -1px; border: 3.5px solid transparent; border-top: 5px solid #2e2e33; }
+    .arch-connector__packet { left: -2.5px; top: 0; }
+    .arch-connector--1 .arch-connector__packet { animation-name: pky-long; }
+    .arch-connector--2 .arch-connector__packet, .arch-connector--3 .arch-connector__packet { animation-name: pky-short; }
+    .arch-connector__label { top: 50%; left: calc(50% + .75rem); transform: translateY(-50%); }
+    .arch-notes { grid-template-columns: 1fr; gap: 1.5rem; }
+    .cmp { grid-template-columns: 1fr; } .cmp .h { display: none; } .cmp .asp { padding-top: 22px; }
+    .road { grid-template-columns: 1fr 1fr; row-gap: 30px; } .road::before { display: none; }
+    .foot { flex-direction: column; align-items: flex-start; }
+  }
+  @keyframes pky-long { 0% { top: 0; opacity: 1; } 16.6% { top: calc(100% - 6px); opacity: 1; } 17%,100% { top: calc(100% - 6px); opacity: 0; } }
+  @keyframes pky-short { 0% { top: 0; opacity: 1; } 13.2% { top: calc(100% - 6px); opacity: 1; } 13.6%,100% { top: calc(100% - 6px); opacity: 0; } }
+</style>
+<link rel="stylesheet" href="css/motion.css" />
+<link rel="stylesheet" href="css/fx.css" />
+<link rel="stylesheet" href="css/wheel.css" />
+<link rel="stylesheet" href="css/game.css" />
+</head>
+<body>
+<script src="js/loader.js"></script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- white outline that hugs each logo's shape (same filter as the current site's Integrations section) -->
+    <filter id="solid-white-outline">
+      <feMorphology in="SourceAlpha" result="dilated" operator="dilate" radius="2" />
+      <feFlood flood-color="#ffffff" flood-opacity="1" result="color" />
+      <feComposite in="color" in2="dilated" operator="in" result="outline" />
+      <feMerge><feMergeNode in="outline" /><feMergeNode in="SourceGraphic" /></feMerge>
+    </filter>
+    <clipPath id="twClip"><path d="M26 50 L43 14 L60 50 Z" /></clipPath>
+    <mask id="twCounters" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64"><rect width="64" height="64" fill="#fff" /><path d="M13.03 51 L21 34.12 L28.97 51 Z" fill="#000" /><path d="M35.03 51 L43 34.12 L50.97 51 Z" fill="#000" /></mask>
+    <mask id="twDecoy" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64"><rect width="64" height="64" fill="#fff" /><path d="M4 50 L21 14 L38 50 Z" fill="#000" stroke="#000" stroke-width="3.2" /><rect x="24" y="39.4" width="17.8" height="12" fill="#000" /></mask>
+    <symbol id="twin" viewBox="0 0 64 64">
+      <g mask="url(#twCounters)"><g clip-path="url(#twClip)"><g mask="url(#twDecoy)" fill="currentColor"><rect y="19" width="64" height="3" /><rect y="24.6" width="64" height="3" /><rect y="30.2" width="64" height="3" /><rect y="35.8" width="64" height="3" /><rect y="41.4" width="64" height="3" /><rect y="47" width="64" height="3" /></g></g><path d="M4 50 L21 14 L38 50 Z" fill="currentColor" /></g>
+      <circle cx="43" cy="14.4" r="3.4" fill="#e5372b" />
+    </symbol>
+    <!-- Lucide icons (same set the built site uses) -->
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></symbol>
+    <symbol id="i-database" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></symbol>
+    <symbol id="i-workflow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></symbol>
+    <symbol id="i-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18V5"/><path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4"/><path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5"/><path d="M17.997 5.125a4 4 0 0 1 2.526 5.77"/><path d="M18 18a4 4 0 0 0 2-7.464"/><path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517"/><path d="M6 18a4 4 0 0 1-2-7.464"/><path d="M6.003 5.125a4 4 0 0 0-2.526 5.77"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></symbol>
+    <symbol id="i-eyeoff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></symbol>
+  </defs>
+</svg>
+
+<div class="topnav">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><svg><use href="#twin" /></svg>mirage</a>
+    <nav class="links"><a class="on" href="#top">Home</a><a href="blog.html">Blog</a><a href="team.html">Team</a><a href="https://github.com/MirageDeception/Mirage-OS" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSe5AVpwYU71H6kDp8WC0zUKu3V-4fb2MFaCd5XpxvOoUh7ZUA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Contact us</a></nav>
+    <div class="actions">
+      <button class="theme" id="themeBtn" aria-label="Switch colour theme"><svg class="moon"><use href="#i-moon" /></svg><svg class="sun"><use href="#i-sun" /></svg></button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="horizon"></div>
+</div>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="scene">
+      <div class="tilt" id="tilt" aria-label="MIRAGE mark">
+        <!-- back layer: the striped decoy peak and its alert dot -->
+        <svg class="layer-decoy" viewBox="0 0 64 50">
+          <g mask="url(#twCounters)"><g clip-path="url(#twClip)"><g mask="url(#twDecoy)" fill="currentColor" class="shim"><rect x="-2" y="19" width="68" height="3" /><rect x="-2" y="24.6" width="68" height="3" /><rect x="-2" y="30.2" width="68" height="3" /><rect x="-2" y="35.8" width="68" height="3" /><rect x="-2" y="41.4" width="68" height="3" /><rect x="-2" y="47" width="68" height="3" /></g></g></g>
+          <circle class="ring" cx="43" cy="14.4" r="3.4" /><circle class="ring r2" cx="43" cy="14.4" r="3.4" />
+          <circle cx="43" cy="14.4" r="3.4" fill="#e5372b" />
+        </svg>
+        <!-- front layer: the real peak -->
+        <svg class="layer-real" viewBox="0 0 64 50"><g mask="url(#twCounters)"><path d="M4 50 L21 14 L38 50 Z" fill="currentColor" /></g></svg>
+      </div>
+    </div>
+    <h1>Deceive. Detect. Defend.</h1>
+  </div>
+  <div class="horizon"></div>
+  <div class="wrap">
+    <div class="reflect" aria-hidden="true">Deceive. Detect. Defend.</div>
+    <p class="sub">MIRAGE is an open-source proactive defense platform being developed to deliver a dynamic multi-cloud deception mesh. It aims to break AI attack automation, detect lateral movement, and reduce dwell time.</p>
+    <div class="cta">
+      <a class="btn ink" href="https://github.com/MirageDeception/Mirage-OS" target="_blank" rel="noopener noreferrer">Deploy the Mesh →</a>
+      <a class="btn twin" href="https://github.com/MirageDeception/Mirage-OS" target="_blank" rel="noopener noreferrer">Contribute on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<!-- PROBLEM -->
+<section id="problem" style="padding-top:40px">
+  <div class="wrap">
+    <div class="head-c">
+      <h2>The drawbacks of traditional security</h2>
+    </div>
+    <div class="three">
+      <article class="panel" data-tilt>
+        <div class="panel__vis">
+          <div class="flood"><div class="flood__track" id="flood"></div></div>
+          <span class="flood__count"><b>2,417</b> open alerts</span>
+        </div>
+        <div class="panel__body"><h3>Drowning in false positives</h3><p>Traditional SIEMs generate thousands of meaningless alerts every day. Your SOC analysts are exhausted from hunting down anomalies that turn out to be benign administrative actions, making it impossible to spot the real attacker in the noise.</p></div>
+      </article>
+      <article class="panel" data-tilt>
+        <div class="panel__vis">
+          <svg class="ps-vis" viewBox="0 0 254 152" id="lateral" aria-hidden="true"></svg>
+        </div>
+        <div class="panel__body"><h3>Bypassing the perimeter</h3><p>Attackers know that once they breach the outer perimeter, modern flat cloud networks offer little resistance. They can easily move laterally, enumerate resources, and steal credentials because the internal network blindly trusts authenticated traffic.</p></div>
+      </article>
+      <article class="panel" data-tilt>
+        <div class="panel__vis">
+          <svg class="ps-vis" viewBox="0 0 270 152" aria-hidden="true">
+            <line x1="20" y1="76" x2="246" y2="76" class="ps-edge" />
+            <path d="M20 76 C 70 76, 92 24, 132 24 S 194 76, 238 76" class="ps-path" />
+            <circle cx="132" cy="76" r="22" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-dasharray="2 3" />
+            <rect x="121" y="65" width="22" height="22" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" />
+            <g fill="currentColor"><rect x="124" y="68" width="16" height="2.4" /><rect x="124" y="73" width="16" height="2.4" /><rect x="124" y="78" width="16" height="2.4" /><rect x="124" y="83" width="16" height="1.6" /></g>
+            <text x="132" y="118" text-anchor="middle" class="ps-label">static decoy</text>
+            <circle cx="20" cy="76" r="6" class="ps-node hit" />
+            <circle cx="238" cy="76" r="6" class="ps-node target" />
+            <text x="238" y="100" text-anchor="middle" class="ps-label">crown jewels</text>
+            <circle r="4" class="ps-attacker"><animateMotion dur="4s" repeatCount="indefinite" path="M20 76 C 70 76, 92 24, 132 24 S 194 76, 238 76" /></circle>
+          </svg>
+        </div>
+        <div class="panel__body"><h3>Static canaries are dead</h3><p>Isolated, resource-based honeypots are easily identified and bypassed by modern attackers. Static canary tokens create single points of failure that alert you too late, without derailing the attacker's path or draining their resources.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="wrap">
+    <div class="head-c">
+      <h2>The deception process</h2>
+      <p class="lede">How MIRAGE creates a high-uncertainty environment that disrupts the stable ground truth attackers depend on.</p>
+    </div>
+    <div class="steps">
+      <div class="step on" data-p="0"><i class="bar"></i><span class="n">01</span><h3>Real network mapping</h3><p>An established, valid network is mapped by the adversary during the reconnaissance phase. They believe they have found the true path.</p></div>
+      <div class="step" data-p="1"><i class="bar"></i><span class="n">02</span><h3>Imposing the deception layer</h3><p>MIRAGE overlays a second, falsified network of honeytokens, decoys, and deceptive paths, mimicking the true map perfectly.</p></div>
+      <div class="step" data-p="2"><i class="bar"></i><span class="n">03</span><h3>The perceived environment</h3><p>The adversary is isolated. The combined deceptive data points are left without real connections, trapping them in a mirage while sounding a silent alarm.</p></div>
+    </div>
+    <div class="graph p0" id="graph">
+      <span class="graph__tag" id="gtag">real network</span>
+      <div class="graph__key"><span><i style="background:var(--ink)"></i>real</span><span><i style="border:1.5px solid var(--ink);background:repeating-linear-gradient(180deg,var(--ink) 0 2px,transparent 2px 4px)"></i>decoy</span></div>
+      <div class="graph__inner" id="ginner"><svg class="edges" id="edges"></svg></div>
+    </div>
+  </div>
+</section>
+
+<!-- IN ACTION: alerting explainer, ported from the DOAR site -->
+<section id="in-action">
+  <div class="wrap">
+    <div class="head-c">
+      <h2>From decoy to alert</h2>
+      <p class="lede">Watch how an attacker gives themselves away: real resources, hidden decoys, one wrong touch, and an alert that reaches your team.</p>
+    </div>
+<figure class="ar-anim" data-anim="alerting" aria-label="Animated explainer: decoys are seeded among real resources, an attacker trips one, and the alert reaches a defender">
+  <svg viewBox="0 0 640 360" role="img" aria-hidden="true">
+    <defs>
+      <radialGradient id="al-sig"><stop offset="0" stop-color="var(--strong)" stop-opacity=".6"/><stop offset="1" stop-color="var(--strong)" stop-opacity="0"/></radialGradient>
+      <clipPath id="al-term"><rect x="-44" y="-30" width="88" height="52" rx="3"/></clipPath>
+    </defs>
+
+    <g class="sc sc1 sc2 sc3">
+      <text class="hd" x="40" y="48"><tspan class="h1" x="40">Real infrastructure</tspan><tspan class="h2" x="40">Decoys go in</tspan><tspan class="h3" x="40">What the attacker sees</tspan></text>
+      <g transform="translate(86,128)">
+        <g class="node real" style="--d:0.00s">
+          <rect x="-36" y="-26" width="72" height="52" rx="9"/>
+          <path class="ic" d="M-9 0h13M4 0a5 5 0 1 0 10 0a5 5 0 1 0-10 0M-9 0v7"/>
+        </g>
+      </g>
+      <g transform="translate(203,128)">
+        <g class="node real" style="--d:0.08s">
+          <rect x="-36" y="-26" width="72" height="52" rx="9"/>
+          <path class="ic" d="M-11-8h22v16h-22z M-11-3h22"/>
+        </g>
+      </g>
+      <g transform="translate(320,128)">
+        <g class="node real" style="--d:0.16s">
+          <rect x="-36" y="-26" width="72" height="52" rx="9"/>
+          <path class="ic" d="M-11-7a11 4 0 1 0 22 0a11 4 0 1 0-22 0M-11-7v14a11 4 0 0 0 22 0v-14"/>
+        </g>
+      </g>
+      <g transform="translate(437,128)">
+        <g class="node real" style="--d:0.24s">
+          <rect x="-36" y="-26" width="72" height="52" rx="9"/>
+          <path class="ic" d="M-9 0h13M4 0a5 5 0 1 0 10 0a5 5 0 1 0-10 0M-9 0v7"/>
+        </g>
+      </g>
+      <g transform="translate(554,128)">
+        <g class="node real" style="--d:0.32s">
+          <rect x="-36" y="-26" width="72" height="52" rx="9"/>
+          <path class="ic" d="M-11-8h22v16h-22z M-11-3h22"/>
+        </g>
+      </g>
+      <g transform="translate(86,212)">
+        <g class="node real" style="--d:0.40s">
+          <rect x="-36" y="-26" width="72" height="52" rx="9"/>
+          <path class="ic" d="M-11-7a11 4 0 1 0 22 0a11 4 0 1 0-22 0M-11-7v14a11 4 0 0 0 22 0v-14"/>
+        </g>
+      </g>
+      <g transform="translate(203,212)">
+        <g class="node decoy" style="--d:0.48s">
+          <rect x="-36" y="-26" width="72" height="52" rx="9"/>
+          <path class="ic" d="M-9 0h13M4 0a5 5 0 1 0 10 0a5 5 0 1 0-10 0M-9 0v7"/>
+        </g>
+      </g>
+      <g transform="translate(320,212)">
+        <g class="node real" style="--d:0.56s">
+          <rect x="-36" y="-26" width="72" height="52" rx="9"/>
+          <path class="ic" d="M-11-8h22v16h-22z M-11-3h22"/>
+        </g>
+      </g>
+      <g transform="translate(437,212)">
+        <g class="node decoy" style="--d:0.64s">
+          <rect x="-36" y="-26" width="72" height="52" rx="9"/>
+          <path class="ic" d="M-11-7a11 4 0 1 0 22 0a11 4 0 1 0-22 0M-11-7v14a11 4 0 0 0 22 0v-14"/>
+        </g>
+      </g>
+      <g transform="translate(554,212)">
+        <g class="node real" style="--d:0.72s">
+          <rect x="-36" y="-26" width="72" height="52" rx="9"/>
+          <path class="ic" d="M-9 0h13M4 0a5 5 0 1 0 10 0a5 5 0 1 0-10 0M-9 0v7"/>
+        </g>
+      </g>
+      <g transform="translate(86,296)">
+        <g class="node decoy" style="--d:0.80s">
+          <rect x="-36" y="-26" width="72" height="52" rx="9"/>
+          <path class="ic" d="M-11-8h22v16h-22z M-11-3h22"/>
+        </g>
+      </g>
+      <g transform="translate(203,296)">
+        <g class="node real" style="--d:0.88s">
+          <rect x="-36" y="-26" width="72" height="52" rx="9"/>
+          <path class="ic" d="M-11-7a11 4 0 1 0 22 0a11 4 0 1 0-22 0M-11-7v14a11 4 0 0 0 22 0v-14"/>
+        </g>
+      </g>
+      <g transform="translate(320,296)">
+        <g class="node real" style="--d:0.96s">
+          <rect x="-36" y="-26" width="72" height="52" rx="9"/>
+          <path class="ic" d="M-9 0h13M4 0a5 5 0 1 0 10 0a5 5 0 1 0-10 0M-9 0v7"/>
+        </g>
+      </g>
+      <g transform="translate(437,296)">
+        <g class="node decoy" style="--d:1.04s">
+          <rect x="-36" y="-26" width="72" height="52" rx="9"/>
+          <path class="ic" d="M-11-8h22v16h-22z M-11-3h22"/>
+        </g>
+      </g>
+      <g transform="translate(554,296)">
+        <g class="node real" style="--d:1.12s">
+          <rect x="-36" y="-26" width="72" height="52" rx="9"/>
+          <path class="ic" d="M-11-7a11 4 0 1 0 22 0a11 4 0 1 0-22 0M-11-7v14a11 4 0 0 0 22 0v-14"/>
+        </g>
+      </g>
+      <g class="sweep"><rect x="-130" y="80" width="130" height="260"/></g>
+    </g>
+
+    <g class="sc sc4 sc5">
+      <text class="hd" x="40" y="48"><tspan class="h4" x="40">The probe</tspan><tspan class="h5" x="40">The alert fires</tspan></text>
+      <g class="world">
+
+        <g class="desk att">
+          <g class="figure" transform="translate(126,214)">
+    <circle class="head" cy="-34" r="11"/>
+    <path class="body" d="M-20 0a20 22 0 0 1 40 0"/>
+  </g>
+          <g class="laptop" transform="translate(126,236)">
+            <path class="screen" d="M-46-32h92v56h-92z"/>
+            <g class="term" clip-path="url(#al-term)">
+    <rect class="tl" x="-40" y="-26" width="24" height="3" rx="1.5"
+          style="--d:0.00s"/>
+    <rect class="tl" x="-40" y="-17" width="53" height="3" rx="1.5"
+          style="--d:0.16s"/>
+    <rect class="tl" x="-40" y="-8" width="36" height="3" rx="1.5"
+          style="--d:0.32s"/>
+    <rect class="tl" x="-40" y="1" width="65" height="3" rx="1.5"
+          style="--d:0.48s"/>
+    <rect class="tl" x="-40" y="10" width="48" height="3" rx="1.5"
+          style="--d:0.64s"/>
+    <rect class="tl" x="-40" y="19" width="31" height="3" rx="1.5"
+          style="--d:0.80s"/>
+    <rect class="tl" x="-40" y="28" width="60" height="3" rx="1.5"
+          style="--d:0.96s"/>
+  </g>
+            <path class="base" d="M-56 26h112l6 7h-124z"/>
+          </g>
+        </g>
+        <path class="divider" d="M300 70v250"/>
+
+        <g class="pnode  n0"
+           transform="translate(376,126)">
+          <rect x="-30" y="-22" width="60" height="44" rx="8"/>
+          <path class="ic" d="M-9 0h13M4 0a5 5 0 1 0 10 0a5 5 0 1 0-10 0M-9 0v7"/>
+        </g>
+        <g class="pnode  n1"
+           transform="translate(468,126)">
+          <rect x="-30" y="-22" width="60" height="44" rx="8"/>
+          <path class="ic" d="M-11-8h22v16h-22z M-11-3h22"/>
+        </g>
+        <g class="pnode  n2"
+           transform="translate(560,126)">
+          <rect x="-30" y="-22" width="60" height="44" rx="8"/>
+          <path class="ic" d="M-11-7a11 4 0 1 0 22 0a11 4 0 1 0-22 0M-11-7v14a11 4 0 0 0 22 0v-14"/>
+        </g>
+        <g class="pnode  n3"
+           transform="translate(376,204)">
+          <rect x="-30" y="-22" width="60" height="44" rx="8"/>
+          <path class="ic" d="M-9 0h13M4 0a5 5 0 1 0 10 0a5 5 0 1 0-10 0M-9 0v7"/>
+        </g>
+        <g class="pnode trap n4"
+           transform="translate(468,204)">
+          <rect x="-30" y="-22" width="60" height="44" rx="8"/>
+          <path class="ic" d="M-11-8h22v16h-22z M-11-3h22"/>
+        </g>
+        <g class="pnode  n5"
+           transform="translate(560,204)">
+          <rect x="-30" y="-22" width="60" height="44" rx="8"/>
+          <path class="ic" d="M-11-7a11 4 0 1 0 22 0a11 4 0 1 0-22 0M-11-7v14a11 4 0 0 0 22 0v-14"/>
+        </g>
+        <g class="pnode  n6"
+           transform="translate(376,282)">
+          <rect x="-30" y="-22" width="60" height="44" rx="8"/>
+          <path class="ic" d="M-9 0h13M4 0a5 5 0 1 0 10 0a5 5 0 1 0-10 0M-9 0v7"/>
+        </g>
+        <g class="pnode  n7"
+           transform="translate(468,282)">
+          <rect x="-30" y="-22" width="60" height="44" rx="8"/>
+          <path class="ic" d="M-11-8h22v16h-22z M-11-3h22"/>
+        </g>
+        <g class="pnode  n8"
+           transform="translate(560,282)">
+          <rect x="-30" y="-22" width="60" height="44" rx="8"/>
+          <path class="ic" d="M-11-7a11 4 0 1 0 22 0a11 4 0 1 0-22 0M-11-7v14a11 4 0 0 0 22 0v-14"/>
+        </g>
+
+        <path class="probe p1" d="M176 212C250 200 300 150 346 126"/>
+        <path class="probe p2" d="M176 212C250 206 320 212 438 204"/>
+        <path class="probe p3" d="M176 212C250 230 320 272 346 282"/>
+        <path class="probe p4 hit" d="M176 212C250 214 360 204 468 204"/>
+
+        <circle class="sig-glow" r="46" fill="url(#al-sig)"/>
+        <circle class="sig" r="7"/>
+        <path class="wire" d="M468 204H902"/>
+
+        <g class="desk def" transform="translate(300,10)">
+          <g class="figure" transform="translate(660,220)">
+    <circle class="head" cy="-34" r="11"/>
+    <path class="body" d="M-20 0a20 22 0 0 1 40 0"/>
+  </g>
+          <g class="laptop" transform="translate(660,248)">
+            <path class="screen lit" d="M-52-36h104v62h-104z"/>
+            <g class="note">
+              <rect x="-40" y="-26" width="80" height="24" rx="4"/>
+              <circle class="dot" cx="-28" cy="-14" r="4"/>
+              <rect class="ln a" x="-18" y="-18" width="48" height="3.4" rx="1.7"/>
+              <rect class="ln b" x="-18" y="-11" width="32" height="3.4" rx="1.7"/>
+            </g>
+            <path class="base" d="M-62 26h124l7 8h-138z"/>
+            <circle class="ping" cy="-6" r="20"/>
+          </g>
+          <text class="lbl" x="660" y="306">alert</text>
+        </g>
+      </g>
+    </g>
+
+  </svg>
+
+  <figcaption class="ar-anim-cap" aria-live="polite"><span></span></figcaption>
+
+  <div class="ar-anim-ctl">
+    <button type="button" class="ar-anim-play" aria-label="Pause animation" aria-pressed="true">❚❚</button>
+    <div class="ar-anim-dots" role="tablist" aria-label="Scenes"></div>
+  </div>
+</figure>
+
+  </div>
+</section>
+
+<!-- ARCHITECTURE: the diagram from the built redesign -->
+<section id="architecture" class="archsec">
+  <div class="wrap">
+    <div class="head-c">
+      <h2>Hub and spoke, built for the cloud</h2>
+      <p class="lede">Decoys live in your member accounts. The moment one is touched, the event is forwarded to an isolated hub that turns it into a high-fidelity alert.</p>
+    </div>
+    <div class="arch-diagram">
+      <div class="arch-spokes">
+        <span class="arch-tier">Trap zone · member accounts</span>
+        <div class="arch-spoke"><span class="arch-spoke__name"><span class="arch-spoke__dot"></span> account/prod</span><div class="arch-spoke__decoys"><span class="arch-chip"><svg><use href="#i-lock" /></svg> IAM role</span><span class="arch-chip is-touched"><svg><use href="#i-server" /></svg> S3 bucket</span></div></div>
+        <div class="arch-spoke"><span class="arch-spoke__name"><span class="arch-spoke__dot"></span> account/staging</span><div class="arch-spoke__decoys"><span class="arch-chip"><svg><use href="#i-key" /></svg> Access key</span><span class="arch-chip"><svg><use href="#i-database" /></svg> Database</span></div></div>
+        <div class="arch-spoke"><span class="arch-spoke__name"><span class="arch-spoke__dot"></span> account/data</span><div class="arch-spoke__decoys"><span class="arch-chip"><svg><use href="#i-server" /></svg> S3 bucket</span><span class="arch-chip"><svg><use href="#i-key" /></svg> Honeytoken</span></div></div>
+      </div>
+      <div class="arch-connector arch-connector--1"><span class="arch-connector__line"><span class="arch-connector__packet"></span></span><span class="arch-connector__label">event forwarding</span></div>
+      <div class="arch-hub">
+        <span class="arch-tier">Control plane · hub account</span>
+        <div class="arch-hub__flow">
+          <div class="arch-node arch-node--bus"><span class="icon-tile"><svg><use href="#i-workflow" /></svg></span><span class="arch-node__title">Central event bus</span><span class="arch-node__sub">Receives every decoy interaction</span></div>
+          <div class="arch-connector arch-connector--2"><span class="arch-connector__line"><span class="arch-connector__packet"></span></span><span class="arch-connector__label">match</span></div>
+          <div class="arch-node arch-node--brain"><span class="icon-tile"><svg><use href="#i-brain" /></svg></span><span class="arch-node__title">Monitoring brain</span><span class="arch-node__sub">Enriches and formats the alert</span></div>
+          <div class="arch-connector arch-connector--3"><span class="arch-connector__line"><span class="arch-connector__packet"></span></span><span class="arch-connector__label">notify</span></div>
+          <div class="arch-node arch-node--alert"><span class="icon-tile"><svg><use href="#i-bell" /></svg></span><span class="arch-node__title">Alerts</span><span class="arch-node__sub">Email, SIEM and dashboard</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="arch-notes">
+      <div class="arch-note"><svg><use href="#i-layers" /></svg><div><h3>Agentless &amp; native</h3><p>Decoys are real cloud resources deployed with Terraform. Nothing to install on your workloads.</p></div></div>
+      <div class="arch-note"><svg><use href="#i-workflow" /></svg><div><h3>One rule per account</h3><p>A single consolidated forwarding rule per spoke keeps the mesh scalable and within cloud limits.</p></div></div>
+      <div class="arch-note"><svg><use href="#i-eyeoff" /></svg><div><h3>Invisible control plane</h3><p>The hub lives in an isolated account. An attacker inside a spoke never sees the layer watching them.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section id="different">
+  <div class="wrap">
+    <div class="head-c">
+      <h2>How MIRAGE is different</h2>
+      <p class="lede">An open-source, community-driven deception framework designed to secure your most critical attack surfaces without relying on generic anomaly detection.</p>
+    </div>
+    <div class="cmp">
+      <div class="h"></div><div class="h old">Existing enterprise deception</div><div class="h new">The MIRAGE framework</div>
+      <div class="asp">Approach &amp; strategy</div><div class="old">Deploys single, isolated decoy resources (basic honeypots).</div><div class="new"><strong>Deception Mesh &amp; Honey Paths.</strong> We surround the attacker with a dynamic, interconnected web of lucrative fake paths.</div>
+      <div class="asp">Core objective</div><div class="old">Focuses solely on detection and sending alerts to your SOC.</div><div class="new"><strong>Derail &amp; Exhaust.</strong> We don't just detect; we actively derail the attacker into endless labyrinths, wasting their time and resources.</div>
+      <div class="asp">Philosophy &amp; code</div><div class="old">Proprietary, Black-Box Software. You cannot see how the detection logic actually works.</div><div class="new"><strong>Open-Source &amp; Transparent.</strong> Built for the community. Audit the code, improve it, and trust the telemetry.</div>
+      <div class="asp">Deployment</div><div class="old">Heavy agents, complex integrations, and vendor-managed appliances.</div><div class="new"><strong>Agentless &amp; Native.</strong> Deployed seamlessly via Terraform modules directly into your existing environments (currently for AWS only).</div>
+    </div>
+  </div>
+</section>
+
+<!-- ADVANTAGES -->
+<section id="advantages">
+  <div class="wrap">
+    <div class="head-c">
+      <h2>The core advantages of MIRAGE</h2>
+    </div>
+    <div class="three">
+      <div class="adv" data-tilt><span class="n">01</span><h3>High-fidelity detection</h3><p>Because deception assets have no business value, any interaction with them is inherently malicious. MIRAGE delivers zero-noise telemetry, allowing your SOC to act with absolute certainty.</p></div>
+      <div class="adv" data-tilt><span class="n">02</span><h3>Breaks attack automation</h3><p>MIRAGE disrupts the stable ground truth that automated scripts and AI adversaries rely on. By dynamically altering the perceived environment, we force tools to fail and attackers to expose themselves.</p></div>
+      <div class="adv" data-tilt><span class="n">03</span><h3>Reduces dwell time</h3><p>Catch lateral movement and credential abuse the second it happens. Our honeytokens and decoy IAM roles provide an early warning system that stops breaches before data exfiltration occurs.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- COVERAGE -->
+<section id="coverage" style="padding-top:40px">
+  <div class="wrap">
+    <div class="head-c">
+      <h2>Available &amp; upcoming deception packs</h2>
+    </div>
+    <div class="road">
+      <div class="pack live" data-tilt><div class="logo"><img src="img/aws-logo.webp" alt="AWS" /></div><b>AWS</b><span>Fully functional 2-tier automated deployment mesh</span><em class="st">Available</em></div>
+      <div class="pack" data-tilt><div class="logo"><img src="img/azure.png" alt="Microsoft Azure" /></div><b>Microsoft Azure</b><span>Native integration into Microsoft Azure</span><em class="st">Planned</em></div>
+      <div class="pack" data-tilt><div class="logo"><img src="img/google-cloud.png" alt="Google Cloud" /></div><b>Google Cloud</b><span>Expanding the dynamic mesh to GCP</span><em class="st">Planned</em></div>
+      <div class="pack" data-tilt><div class="logo"><img src="img/ms-ad.png" alt="Active Directory" /></div><b>Active Directory</b><span>AD traps and privilege escalation decoys</span><em class="st">Planned</em></div>
+      <div class="pack" data-tilt><div class="logo"><img src="img/kubernetes.png" alt="Kubernetes" /></div><b>Kubernetes</b><span>Decoys inside your clusters</span><em class="st">Planned</em></div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICKSTART -->
+<section id="quickstart" style="padding-top:40px">
+  <div class="wrap qs">
+    <div>
+      <h2>Deploy your first decoy in seconds</h2>
+      <p class="lede">After you are done setting up the tool, deploy your first decoy scenario in seconds.</p>
+    </div>
+    <div class="term soon">
+      <div class="soon-k"><span class="p">$</span>mirage deploy</div>
+      <h3>Coming soon<i class="cursor" aria-hidden="true"></i></h3>
+      <p>We are working very hard to bring this to public.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PITCH -->
+<section class="pitch">
+  <div class="wrap">
+    <h2>Help build the future of defense</h2>
+    <p class="lede">We are assembling a team of elite security engineers, cloud architects, and offensive researchers. If you believe in proactive disruption over reactive alerts, join the mission to build the ultimate deception mesh.</p>
+    <div class="cta"><a class="btn ink" href="https://github.com/MirageDeception/Mirage-OS" target="_blank" rel="noopener noreferrer">Contribute on GitHub</a><a class="btn twin" href="https://docs.google.com/forms/d/e/1FAIpQLSe5AVpwYU71H6kDp8WC0zUKu3V-4fb2MFaCd5XpxvOoUh7ZUA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Contact the Team</a></div>
+  </div>
+  <div class="horizon"></div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <a class="brand" href="index.html" style="font-size:19px"><svg width="24" height="24"><use href="#twin" /></svg>mirage</a>
+    <nav><a href="https://github.com/MirageDeception/Mirage-OS" target="_blank" rel="noopener noreferrer">GitHub</a><a href="blog.html">Blog</a><a href="team.html">Meet the founders</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSe5AVpwYU71H6kDp8WC0zUKu3V-4fb2MFaCd5XpxvOoUh7ZUA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Contact us</a></nav>
+    <span>© 2026 MIRAGE · Built by Arham Jain &amp; Devanshu Nagpal</span>
+  </div>
+</footer>
+
+<script>
+
+  // ---- problem 1: alert flood (rows rendered twice so the scroll loops) ----
+  const ALERTS = [['LOW','S3 ListBuckets volume spike'],['MED','Console login from new ASN'],['LOW','Security group modified'],['MED','Impossible travel: admin@'],['LOW','KMS key policy read'],['HIGH','AssumeRole from unknown host'],['LOW','CloudTrail lookup by CI role'],['MED','Spike in GetObject calls'],['LOW','IAM user listed access keys']];
+  document.getElementById('flood').innerHTML = [...ALERTS, ...ALERTS].map(([s, m]) => `<div class="flood__row${s === 'HIGH' ? ' hit' : ''}"><em>${s}</em>${m}</div>`).join('');
+
+  // ---- problem 2: lateral movement (same graph as the built site) ----
+  const N = [[30,30],[90,22],[150,34],[210,26],[44,82],[104,74],[164,86],[224,78],[28,128],[88,122],[148,132],[208,124]];
+  const path = 'M30 30 L104 74 L88 122 L164 86 L224 78';
+  let svg = '';
+  N.forEach(([x, y], i) => N.slice(i + 1).forEach(([x2, y2]) => { if (Math.hypot(x2 - x, y2 - y) < 72) svg += `<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" class="ps-edge" />`; }));
+  svg += `<path d="${path}" class="ps-path" />`;
+  N.forEach(([x, y], i) => svg += `<circle cx="${x}" cy="${y}" r="5" class="ps-node${[0,5,9,6,7].includes(i) ? ' hit' : ''}" />`);
+  svg += `<circle r="4" class="ps-attacker"><animateMotion dur="4s" repeatCount="indefinite" path="${path}" /></circle>`;
+  document.getElementById('lateral').innerHTML = svg;
+
+  // ---- deception process: same node layout as the built site, 3 phases on a 4s loop ----
+  const REAL = [[20,20],[50,30],[80,25],[30,60],[60,70],[80,75],[40,15],[45,45],[85,45],[40,85],[80,90],[50,10]];
+  const DECOY = [[30,40],[13,31],[65,35],[20,85],[60,90],[15,60],[25,75],[85,55]];
+  const RE = [[0,11],[0,6],[6,1],[11,1],[1,2],[1,3],[3,4],[4,5],[5,2],[5,10],[4,9],[9,3],[0,7],[7,2],[7,8]];
+  const DE = [[1,0],[1,5],[0,5],[0,2],[0,6],[2,7],[2,4],[2,6],[7,4],[6,4],[6,3],[5,3]];
+  const g = document.getElementById('graph'), inner = document.getElementById('ginner');
+  // each link gets a random delay (0-0.8s) so links appear and dissolve one by one, not all at once
+  const ln = (a, b) => `<line x1="${a[0]}%" y1="${a[1]}%" x2="${b[0]}%" y2="${b[1]}%" style="--d:${(Math.random() * 0.8).toFixed(2)}s" />`;
+  // Decoys are wired into the real network too: each one links to 1-2 of its 3 nearest real
+  // resources, picked at random on every load, so the fake paths blend into the real ones.
+  const BRIDGES = DECOY.flatMap((d, di) => {
+    const near = REAL.map((r, ri) => [Math.hypot(r[0] - d[0], r[1] - d[1]), ri]).sort((x, y) => x[0] - y[0]).slice(0, 3);
+    const picks = near.sort(() => Math.random() - .5).slice(0, 1 + Math.round(Math.random()));
+    return picks.map(([, ri]) => [di, ri]);
+  });
+  document.getElementById('edges').innerHTML = `<g class="real">${RE.map(([a,b]) => ln(REAL[a], REAL[b])).join('')}</g><g class="decoy">${DE.map(([a,b]) => ln(DECOY[a], DECOY[b])).join('')}${BRIDGES.map(([d,r]) => ln(DECOY[d], REAL[r])).join('')}</g>`;
+  REAL.forEach(([x, y]) => inner.insertAdjacentHTML('beforeend', `<span class="node real" style="left:${x}%;top:${y}%"></span>`));
+  DECOY.forEach(([x, y]) => inner.insertAdjacentHTML('beforeend', `<span class="node decoy" style="left:${x}%;top:${y}%"></span>`));
+  const tags = ['real network', 'real + deception layer', "attacker's view: everything looks real"];
+  const steps = [...document.querySelectorAll('.step')];
+  let timer;
+  function show(p) {
+    g.className = 'graph p' + p;
+    document.getElementById('gtag').textContent = tags[p];
+    steps.forEach((s, i) => {
+      s.classList.toggle('on', i === p);
+      const bar = s.querySelector('.bar'); bar.style.animation = 'none'; bar.offsetHeight; bar.style.animation = '';
+    });
+    clearTimeout(timer); timer = setTimeout(() => show((p + 1) % 3), 4000);
+  }
+  steps.forEach((s) => s.addEventListener('click', () => show(+s.dataset.p)));
+  show(0);
+
+  // ---- alerting explainer (from the DOAR site): advances data-scene and the caption; CSS does the motion ----
+  (function () {
+    const SCENES = [
+      [1, 3000, 'Your estate: the resources that actually serve the business.'],
+      [2, 3200, 'Decoys go in alongside them. You know exactly which is which.'],
+      [3, 3000, 'The attacker does not. From the outside, every resource looks equally real.'],
+      [4, 5000, 'They probe. Real resources answer and give nothing away, until the fourth, which is a decoy. Touching it is the one thing nothing legitimate ever does.'],
+      [5, 4500, 'So the decoy reports itself, and a near-certain alert reaches a human.'],
+    ];
+    document.querySelectorAll('.ar-anim[data-anim="alerting"]').forEach((fig) => {
+      const cap = fig.querySelector('.ar-anim-cap span'), btn = fig.querySelector('.ar-anim-play'), dots = fig.querySelector('.ar-anim-dots');
+      let i = 0, timer = null, playing = true, visible = false;
+      SCENES.forEach((s, n) => {
+        const d = document.createElement('button');
+        d.type = 'button'; d.setAttribute('role', 'tab'); d.setAttribute('aria-label', 'Scene ' + (n + 1));
+        d.addEventListener('click', () => { stop(); go(n); });
+        dots.appendChild(d);
+      });
+      const dotEls = [...dots.children];
+      function paint() {
+        const s = SCENES[i];
+        fig.dataset.scene = s[0];
+        cap.textContent = s[2];
+        fig.querySelectorAll('.sc').forEach((g) => g.classList.toggle('on', g.classList.contains('sc' + s[0])));
+        dotEls.forEach((d, n) => d.setAttribute('aria-selected', n === i ? 'true' : 'false'));
+      }
+      function go(n) { i = (n + SCENES.length) % SCENES.length; paint(); if (playing && visible) queue(); }
+      function queue() { clearTimeout(timer); timer = setTimeout(() => go(i + 1), SCENES[i][1]); }
+      function stop() { playing = false; clearTimeout(timer); btn.textContent = '▶'; btn.setAttribute('aria-label', 'Play animation'); btn.setAttribute('aria-pressed', 'false'); }
+      function start() { playing = true; btn.textContent = '❚❚'; btn.setAttribute('aria-label', 'Pause animation'); btn.setAttribute('aria-pressed', 'true'); queue(); }
+      btn.addEventListener('click', () => (playing ? stop() : start()));
+      // only runs while on screen; starts from scene 1 each time it comes into view
+      new IntersectionObserver((es) => es.forEach((e) => {
+        visible = e.isIntersecting;
+        if (visible && playing) go(0); else clearTimeout(timer);
+      }), { threshold: .25 }).observe(fig);
+      paint();
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) { i = 4; paint(); stop(); }
+    });
+  })();
+
+  // ---- cards tilt slightly on hover (desktop pointers only) ----
+  const canTilt = matchMedia('(hover: hover) and (pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (canTilt) {
+    document.querySelectorAll('[data-tilt]').forEach((el) => {
+      el.addEventListener('mousemove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        el.style.transform = `perspective(900px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-2px)`;
+      });
+      el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+    });
+  }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="js/motion.js"></script>
+<script src="js/fx.js"></script>
+<script src="js/wheel.js"></script>
+<script src="js/game-audio.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

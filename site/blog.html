@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Blog — MIRAGE</title>
+<meta name="description" content="Notes from the team on cloud deception, detection engineering and the research behind MIRAGE." />
+<link rel="canonical" href="https://miragedeception.github.io/Mirage-website/blog.html" />
+<link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+<meta name="theme-color" content="#f6f3ee" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="MIRAGE" />
+<meta property="og:title" content="Blog — MIRAGE" />
+<meta property="og:description" content="Notes from the team on cloud deception, detection engineering and the research behind MIRAGE." />
+<meta property="og:url" content="https://miragedeception.github.io/Mirage-website/blog.html" />
+<meta property="og:image" content="https://miragedeception.github.io/Mirage-website/img/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://miragedeception.github.io/Mirage-website/img/og-image.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script>
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('mirage-theme'); } catch (e) {}
+    if (!t) t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.dataset.theme = t;
+    // Motion: cover the page with the loader before it paints. Arriving from another page of
+    // the site gets the short version (the curtain just lifts); a fresh visit or reload gets the full build.
+    var d = document.documentElement;
+    if (!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+      d.classList.add('motion', 'is-loading');
+      try {
+        var nav = performance.getEntriesByType('navigation')[0], ref = document.referrer && new URL(document.referrer);
+        if (nav && nav.type === 'navigate' && ref && ref.origin === location.origin && ref.pathname !== location.pathname) d.classList.add('quick-load');
+      } catch (e) {}
+    }
+  })();
+</script>
+<link rel="stylesheet" href="css/base.css" />
+<style>
+  .posts { max-width: 1000px; margin: 0 auto 120px; display: flex; flex-direction: column; gap: 24px; }
+  .post { background: var(--card); clip-path: var(--notch-lg); }
+  .post__main { padding: 36px 38px; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+  .meta i { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-3); }
+  .post h2 { font-size: 32px; line-height: 1.15; letter-spacing: -0.035em; font-weight: 700; margin: 16px 0 14px; }
+  .post h2 a:hover { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 2px; }
+  .post .ex { color: var(--ink-2); font-size: 16.5px; line-height: 1.7; max-width: 60ch; }
+  .points { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 26px; margin: 24px 0 28px; }
+  .points li { display: flex; gap: 10px; align-items: baseline; font-size: 15px; color: var(--ink-2); }
+  .points li::before { content: ''; flex-shrink: 0; width: 9px; height: 9px; transform: translateY(1px); background: var(--ink); }
+  .post__foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding-top: 22px; border-top: 1px solid var(--line); }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tags span { font-size: 12px; padding: 3px 10px; background: var(--bg-2); color: var(--ink-2); }
+  @media (max-width: 860px) {
+    .post__main { padding: 26px 22px; }
+    .points { grid-template-columns: 1fr; }
+          }
+</style>
+<link rel="stylesheet" href="css/motion.css" />
+</head>
+<body>
+<script src="js/loader.js"></script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <clipPath id="twClip"><path d="M26 50 L43 14 L60 50 Z" /></clipPath>
+    <mask id="twCounters" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64"><rect width="64" height="64" fill="#fff" /><path d="M13.03 51 L21 34.12 L28.97 51 Z" fill="#000" /><path d="M35.03 51 L43 34.12 L50.97 51 Z" fill="#000" /></mask>
+    <mask id="twDecoy" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64"><rect width="64" height="64" fill="#fff" /><path d="M4 50 L21 14 L38 50 Z" fill="#000" stroke="#000" stroke-width="3.2" /><rect x="24" y="39.4" width="17.8" height="12" fill="#000" /></mask>
+    <symbol id="twin" viewBox="0 0 64 64">
+      <g mask="url(#twCounters)"><g clip-path="url(#twClip)"><g mask="url(#twDecoy)" fill="currentColor"><rect y="19" width="64" height="3" /><rect y="24.6" width="64" height="3" /><rect y="30.2" width="64" height="3" /><rect y="35.8" width="64" height="3" /><rect y="41.4" width="64" height="3" /><rect y="47" width="64" height="3" /></g></g><path d="M4 50 L21 14 L38 50 Z" fill="currentColor" /></g>
+      <circle cx="43" cy="14.4" r="3.4" fill="#e5372b" />
+    </symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></symbol>
+  </defs>
+</svg>
+
+<div class="topnav">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><svg><use href="#twin" /></svg>mirage</a>
+    <nav class="links"><a href="index.html">Home</a><a class="on" href="blog.html">Blog</a><a href="team.html">Team</a><a href="https://github.com/MirageDeception/Mirage-OS" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSe5AVpwYU71H6kDp8WC0zUKu3V-4fb2MFaCd5XpxvOoUh7ZUA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Contact us</a></nav>
+    <div class="actions">
+      <button class="theme" id="themeBtn" aria-label="Switch colour theme"><svg class="moon"><use href="#i-moon" /></svg><svg class="sun"><use href="#i-sun" /></svg></button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="horizon"></div>
+</div>
+
+<main class="wrap">
+  <div class="page-head">
+    <h1 class="page">Research &amp; writing</h1>
+    <p class="lede">Notes from the team on cloud deception, detection engineering and the research behind MIRAGE.</p>
+  </div>
+
+  <div class="posts">
+    <article class="post">
+      <div class="post__main">
+        <div class="meta"><time datetime="2025-10-23">23 Oct 2025</time><i></i><span>LinkedIn</span><i></i><span>Arham Jain</span></div>
+        <h2><a href="https://www.linkedin.com/posts/arham-jain-64433a175_cybersecurity-cloudsecurity-aws-ugcPost-7387093437684056064-31th/" target="_blank" rel="noopener noreferrer">A deception and detection integration framework, built inside AWS</a></h2>
+        <p class="ex">Decoys and honeypots usually sit at the attack surface. This research plants them inside the environment instead, to definitively confirm an active compromise. It detects adversaries not through signatures, but through their curiosity and mistakes.</p>
+        <ul class="points">
+          <li>Honey IAM roles &amp; tokens</li>
+          <li>Honey AWS account</li>
+          <li>Honey artifacts: services, S3 buckets, files</li>
+          <li>SIEM integration with true-positive alerts</li>
+        </ul>
+        <div class="post__foot">
+          <div class="tags"><span>Research</span><span>AWS</span><span>Deception</span></div>
+          <a class="btn ink sm" href="https://www.linkedin.com/posts/arham-jain-64433a175_cybersecurity-cloudsecurity-aws-ugcPost-7387093437684056064-31th/" target="_blank" rel="noopener noreferrer">Read on LinkedIn ↗</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</main>
+
+<div class="horizon"></div>
+<footer>
+  <div class="wrap foot">
+    <a class="brand" href="index.html" style="font-size:19px"><svg width="24" height="24"><use href="#twin" /></svg>mirage</a>
+    <nav><a href="https://github.com/MirageDeception/Mirage-OS" target="_blank" rel="noopener noreferrer">GitHub</a><a href="blog.html">Blog</a><a href="team.html">Meet the founders</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSe5AVpwYU71H6kDp8WC0zUKu3V-4fb2MFaCd5XpxvOoUh7ZUA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Contact us</a></nav>
+    <span>© 2026 MIRAGE · Built by Arham Jain &amp; Devanshu Nagpal</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="js/motion.js"></script>
+</body>
+</html>

@@ -217,4 +217,99 @@
 
   // footer
   $('.foot').forEach((f) => gsap.from(f.children, { y: 16, opacity: 0, duration: .8, ease: 'power3.out', stagger: .1, scrollTrigger: once(f, 'top 98%') }));
+
+  // ---- "Coming soon" hover & click badge for GitHub / Deploy links ----
+  (function () {
+    const tip = document.createElement('div');
+    tip.className = 'soon-tip';
+    tip.setAttribute('role', 'status');
+    tip.setAttribute('aria-hidden', 'true');
+    tip.innerHTML = '<span class="dot"></span><span>Coming soon</span>';
+    document.body.appendChild(tip);
+
+    let currentTarget = null;
+    let clickTimeout = null;
+    let lastScrollY = window.scrollY;
+
+    const positionTip = (target) => {
+      const r = target.getBoundingClientRect();
+      const tipW = tip.offsetWidth || 110;
+      const tipH = tip.offsetHeight || 28;
+      let left = r.left + r.width / 2 - tipW / 2;
+      left = Math.max(8, Math.min(innerWidth - tipW - 8, left));
+      let top = r.top - tipH - 8;
+      if (top < 8) top = r.bottom + 8;
+      tip.style.left = left + 'px';
+      tip.style.top = top + 'px';
+    };
+
+    const isSoonTarget = (el) => {
+      if (!el) return null;
+      const node = el.nodeType === 3 ? el.parentElement : el;
+      const a = node && node.closest ? node.closest('a[href], button') : null;
+      if (!a) return null;
+      if (a.hasAttribute('data-soon')) return a;
+      const href = (a.getAttribute('href') || '') + ' ' + (a.href || '');
+      if (href.includes('github.com/MirageDeception/Mirage-OS') || a.classList.contains('soon-btn')) return a;
+      return null;
+    };
+
+    const show = (target, text = 'Coming soon') => {
+      currentTarget = target;
+      lastScrollY = window.scrollY;
+      tip.querySelector('span:last-child').textContent = text;
+      positionTip(target);
+      tip.classList.add('is-visible');
+    };
+
+    const hide = () => {
+      if (clickTimeout) return;
+      currentTarget = null;
+      tip.classList.remove('is-visible', 'shake');
+    };
+
+    const dismiss = () => {
+      clearTimeout(clickTimeout);
+      clickTimeout = null;
+      currentTarget = null;
+      tip.classList.remove('is-visible', 'shake');
+    };
+
+    document.addEventListener('mouseover', (e) => {
+      const t = isSoonTarget(e.target);
+      if (t) show(t, t.getAttribute('data-soon') || 'Coming soon');
+    }, { passive: true });
+
+    document.addEventListener('mouseout', (e) => {
+      const t = isSoonTarget(e.target);
+      if (t && (!e.relatedTarget || !t.contains(e.relatedTarget))) hide();
+    }, { passive: true });
+
+    document.addEventListener('click', (e) => {
+      const t = isSoonTarget(e.target);
+      if (!t) return;
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      show(t, 'Coming soon — stay tuned!');
+      tip.classList.remove('shake');
+      void tip.offsetWidth;
+      tip.classList.add('shake');
+      clearTimeout(clickTimeout);
+      clickTimeout = setTimeout(() => {
+        clickTimeout = null;
+        if (!currentTarget || !t.matches(':hover')) hide();
+      }, 1600);
+    }, true);
+
+    const onScroll = () => {
+      if (Math.abs(window.scrollY - lastScrollY) > 4) {
+        dismiss();
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    if (window.__mirageLenis) {
+      window.__mirageLenis.on('scroll', onScroll);
+    }
+  })();
 })();
